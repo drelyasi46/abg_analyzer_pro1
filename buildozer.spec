@@ -15,7 +15,7 @@ requirements = python3==3.11.5,kivy==2.2.1,kivymd==1.2.0
 
 p4a.branch = v2024.01.21
 p4a.commit = v2024.01.21
-p4a.source_dir = /home/babak/.buildozer/android/platform/python-for-android
+p4a.source_dir = /home/runner/.buildozer/android/platform/python-for-android
 
 orientation = portrait
 fullscreen = 0
