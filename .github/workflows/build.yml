@@ -55,20 +55,6 @@ jobs:
           pip install cython==0.29.37
 
 
-      - name: Prepare python-for-android
-        run: |
-          mkdir -p ~/.buildozer/android/platform
-          cd ~/.buildozer/android/platform
-
-          if [ ! -d python-for-android ]; then
-            git clone \
-              --branch v2024.01.21 \
-              --depth=1 \
-              https://github.com/kivy/python-for-android.git \
-              python-for-android
-          fi
-
-
       - name: Build APK
         run: |
           set -o pipefail
