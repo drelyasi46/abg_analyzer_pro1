@@ -44,6 +44,13 @@ jobs:
           pip install cython==0.29.37
 
 
+      - name: Debug Buildozer Config
+        run: |
+          echo "===== SEARCH p4a.source_dir ====="
+          grep -R "p4a.source_dir" ~/.buildozer . || true
+          echo "===== BUILDOZER VERSION ====="
+          buildozer --version
+
       - name: Build APK
         run: |
           set -o pipefail
@@ -98,4 +105,5 @@ jobs:
           path: |
             bin/*.apk
           if-no-files-found: warn
+
 
