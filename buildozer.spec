@@ -23,7 +23,6 @@ android.api = 34
 android.minapi = 24
 android.archs = arm64-v8a
 android.enable_androidx = True
-android.ndk_path = /mnt/c/Users/Emd/AppData/Local/Android/Sdk/ndk/30.0.15729638
 android.accept_sdk_license = True
 
 log_level = 2
@@ -32,5 +31,4 @@ warn_on_root = 0
 [buildozer]
 
 log_level = 2
-android.sdk_path = /mnt/c/Users/Emd/AppData/Local/Android/Sdk
 android.build_tools_version = 34.0.0
