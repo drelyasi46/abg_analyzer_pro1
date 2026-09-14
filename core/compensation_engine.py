@@ -183,3 +183,22 @@ class CompensationEngine:
             status=status,
             message=message,
         )
+
+    @staticmethod
+    def detect_chronicity(primary_disorder, pco2, hco3):
+
+        if primary_disorder == "Respiratory Acidosis":
+
+            acute_expected = 24 + ((pco2 - 40) / 10)
+            chronic_expected = 24 + (((pco2 - 40) / 10) * 4)
+
+            return abs(hco3 - chronic_expected) < abs(hco3 - acute_expected)
+
+        elif primary_disorder == "Respiratory Alkalosis":
+
+            acute_expected = 24 - (((40 - pco2) / 10) * 2)
+            chronic_expected = 24 - (((40 - pco2) / 10) * 4)
+
+            return abs(hco3 - chronic_expected) < abs(hco3 - acute_expected)
+
+        return False
