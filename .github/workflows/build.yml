@@ -51,6 +51,12 @@ jobs:
           echo "===== BUILDOZER VERSION ====="
           buildozer --version
 
+      - name: Clean Buildozer State
+        run: |
+          rm -rf ~/.buildozer
+          rm -rf .buildozer
+          echo "Cleaned Buildozer state"
+
       - name: Build APK
         run: |
           set -o pipefail
@@ -105,5 +111,6 @@ jobs:
           path: |
             bin/*.apk
           if-no-files-found: warn
+
 
 
