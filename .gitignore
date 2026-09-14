@@ -1,0 +1,42 @@
+doctor_report.json
+nano .gitignore
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+venv_buildozer/
+
+# Buildozer
+.buildozer/
+bin/
+
+# Android
+.gradle/
+android/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+python-for-android-master/
+
+# Buildozer
+.buildozer/
+bin/
+
+# Python environments
+.venv/
+venv/
+venv_buildozer/
+venv_win/
+
+# python-for-android
+python-for-android-master/

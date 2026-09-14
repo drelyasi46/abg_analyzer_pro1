@@ -1,0 +1,77 @@
+<InputCard>
+
+    orientation: "vertical"
+    adaptive_height: True
+
+    MDCard:
+        elevation: 3
+        radius: [18, 18, 18, 18]
+        padding: "16dp"
+        orientation: "vertical"
+        adaptive_height: True
+        spacing: "12dp"
+
+        MDLabel:
+            text: "Patient Parameters"
+            halign: "center"
+            bold: True
+            font_style: "Body1"
+
+        MDTextField:
+            id: ph
+            hint_text: "pH"
+            helper_text: "Normal: 7.35 - 7.45"
+            helper_text_mode: "on_focus"
+            input_filter: "float"
+
+        MDTextField:
+            id: pco2
+            hint_text: "PaCO2 (mmHg)"
+            helper_text: "Normal: 35 - 45"
+            helper_text_mode: "on_focus"
+            input_filter: "float"
+
+        MDTextField:
+            id: hco3
+            hint_text: "HCO3 (mEq/L)"
+            helper_text: "Normal: 22 - 26"
+            helper_text_mode: "on_focus"
+            input_filter: "float"
+
+        MDSeparator:
+
+        MDLabel:
+            text: "Optional Laboratory Values"
+            halign: "center"
+            bold: True
+            font_style: "Body1"
+
+        MDTextField:
+            id: na
+            hint_text: "Na+"
+            input_filter: "float"
+
+        MDTextField:
+            id: k
+            hint_text: "K+"
+            input_filter: "float"
+
+        MDTextField:
+            id: cl
+            hint_text: "Cl-"
+            input_filter: "float"
+
+        MDTextField:
+            id: albumin
+            hint_text: "Albumin (g/dL)"
+            input_filter: "float"
+
+        MDTextField:
+            id: lactate
+            hint_text: "Lactate (mmol/L)"
+            input_filter: "float"
+
+        MDRaisedButton:
+            text: "Analyze ABG"
+            pos_hint: {"center_x": 0.5}
+            on_release: app.analyze()

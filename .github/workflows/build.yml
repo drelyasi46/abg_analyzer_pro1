@@ -1,0 +1,125 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    env:
+      BUILDOZER_WARN_ON_ROOT: 0
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+
+      - name: Cache Buildozer
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.buildozer
+            ~/.gradle
+          key: buildozer-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+          restore-keys: |
+            buildozer-${{ runner.os }}-
+
+
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            git \
+            zip \
+            unzip \
+            openjdk-17-jdk \
+            python3-pip \
+            autoconf \
+            libtool \
+            pkg-config \
+            cmake
+
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install buildozer==1.6.0
+          pip install cython==0.29.37
+
+
+      - name: Prepare python-for-android
+        run: |
+          mkdir -p ~/.buildozer/android/platform
+          cd ~/.buildozer/android/platform
+
+          if [ ! -d python-for-android ]; then
+            git clone \
+              --branch v2024.01.21 \
+              --depth=1 \
+              https://github.com/kivy/python-for-android.git \
+              python-for-android
+          fi
+
+
+      - name: Build APK
+        run: |
+          set -o pipefail
+          buildozer android debug 2>&1 | tee build.log
+
+
+      - name: Verify APK
+        if: always()
+        run: |
+          echo "===== APK SEARCH ====="
+          find . -type f -name "*.apk" -print
+
+          if ! find . -type f -name "*.apk" | grep -q apk; then
+            echo "ERROR: No APK was generated"
+            exit 1
+          fi
+
+
+      - name: Debug Build
+        if: always()
+        run: |
+          echo "===== BIN CONTENT ====="
+          ls -la bin || true
+
+          echo "===== LAST BUILD LOG ====="
+          tail -300 build.log || true
+
+
+      - name: Generate ABG Doctor Report
+        if: always()
+        run: |
+          python preflight.py || true
+
+
+      - name: Upload Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: abg-build-debug
+          path: |
+            build.log
+            doctor_report.json
+            doctor_report.md
+          if-no-files-found: warn
+
+
+      - name: Upload APK
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: abg-analyzer-apk
+          path: |
+            bin/*.apk
+          if-no-files-found: warn

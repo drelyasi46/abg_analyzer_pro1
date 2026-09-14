@@ -1,0 +1,61 @@
+from pathlib import Path
+import shutil
+
+ROOT = Path(".")
+
+REPLACEMENTS = {
+    "â€“": "-",
+    "â€”": "-",
+    "â€": '"',
+    "â€˜": "'",
+    "â€™": "'",
+    "â€œ": '"',
+    "â€": '"',
+    "ΓÇó": "-",
+
+    "PaCOΓéé": "PaCO2",
+    "PaCOâ‚‚": "PaCO2",
+
+    "HCOΓéâ": "HCO3",
+    "HCOΓéâΓü╗": "HCO3",
+    "HCOâ‚ƒâ»": "HCO3",
+
+    "NaΓü║": "Na",
+    "Naâº": "Na",
+
+    "KΓü║": "K",
+    "Kâº": "K",
+
+    "ClΓü╗": "Cl",
+    "Clâ»": "Cl",
+}
+
+extensions = {".py", ".kv"}
+
+fixed = 0
+
+for file in ROOT.rglob("*"):
+    if file.suffix not in extensions:
+        continue
+
+    try:
+        text = file.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        continue
+
+    original = text
+
+    for old, new in REPLACEMENTS.items():
+        text = text.replace(old, new)
+
+    if text != original:
+        backup = file.with_suffix(file.suffix + ".bak")
+        shutil.copy2(file, backup)
+
+        file.write_text(text, encoding="utf-8")
+
+        print("Fixed:", file)
+        fixed += 1
+
+print()
+print(f"Finished. {fixed} file(s) repaired.")
