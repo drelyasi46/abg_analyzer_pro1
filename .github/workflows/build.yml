@@ -28,7 +28,7 @@ jobs:
           path: |
             ~/.buildozer
             ~/.gradle
-          key: buildozer-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+          key: buildozer-clean-${{ github.run_id }}
           restore-keys: |
             buildozer-${{ runner.os }}-
 
