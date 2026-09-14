@@ -22,17 +22,6 @@ jobs:
           python-version: "3.11"
 
 
-      - name: Cache Buildozer
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.buildozer
-            ~/.gradle
-          key: buildozer-clean-${{ github.run_id }}
-          restore-keys: |
-            buildozer-${{ runner.os }}-
-
-
       - name: Install system dependencies
         run: |
           sudo apt update
@@ -109,3 +98,4 @@ jobs:
           path: |
             bin/*.apk
           if-no-files-found: warn
+
