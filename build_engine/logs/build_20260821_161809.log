@@ -1,0 +1,5 @@
+[16:18:09] === CONFIGURING BUILD ENVIRONMENT ===
+[16:18:09] P4A_SOURCE_DIR: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+[16:18:09] PYTHONPATH: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+[16:18:09] P4A_openssl_DIR: /home/babak/p4a-local/openssl
+[16:18:09] P4A_OPENSSL_DIR: /home/babak/p4a-local/openssl

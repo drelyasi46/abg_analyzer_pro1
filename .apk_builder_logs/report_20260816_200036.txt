@@ -1,0 +1,18 @@
+Universal APK Builder Report
+============================
+
+Date: Sun Aug 16 20:04:36 +0330 2026
+Project: /home/babak/abg_analyzer_pro
+
+Requirements: python3==3.11.5,kivy==2.2.1
+Android API: 34
+Android NDK: 27c
+Architectures: arm64-v8a
+
+Build success: 0
+
+Main log:
+/home/babak/abg_analyzer_pro/.apk_builder_logs/build_20260816_200036.log
+
+Artifacts:
+

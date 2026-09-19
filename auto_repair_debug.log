@@ -1,0 +1,563 @@
++ set -u
++ PROJECT=/home/babak/abg_analyzer_pro
++ BACKUP_ROOT=/home/babak/abg_analyzer_pro/repair_backups
+++ date +%Y%m%d_%H%M%S
++ STAMP=20260814_175910
++ BACKUP=/home/babak/abg_analyzer_pro/repair_backups/20260814_175910
++ LOG=/home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
++ mkdir -p /home/babak/abg_analyzer_pro/repair_backups/20260814_175910
++ echo ============================================================
+============================================================
++ echo ' ABG Analyzer Pro - AUTO REPAIR'
+ ABG Analyzer Pro - AUTO REPAIR
++ echo ============================================================
+============================================================
++ echo 'Project : /home/babak/abg_analyzer_pro'
+Project : /home/babak/abg_analyzer_pro
++ echo 'Backup  : /home/babak/abg_analyzer_pro/repair_backups/20260814_175910'
+Backup  : /home/babak/abg_analyzer_pro/repair_backups/20260814_175910
++ echo 'Log     : /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log'
+Log     : /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
++ echo
+
++ log '[1/10] Creating safe backup...'
++ echo '[1/10] Creating safe backup...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[1/10] Creating safe backup...
++ backup_file /home/babak/abg_analyzer_pro/buildozer.spec
++ local f=/home/babak/abg_analyzer_pro/buildozer.spec
++ '[' -f /home/babak/abg_analyzer_pro/buildozer.spec ']'
++ cp -a /home/babak/abg_analyzer_pro/buildozer.spec /home/babak/abg_analyzer_pro/repair_backups/20260814_175910/
++ log 'BACKUP: /home/babak/abg_analyzer_pro/buildozer.spec'
++ echo 'BACKUP: /home/babak/abg_analyzer_pro/buildozer.spec'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+BACKUP: /home/babak/abg_analyzer_pro/buildozer.spec
++ backup_file /home/babak/abg_analyzer_pro/main.py
++ local f=/home/babak/abg_analyzer_pro/main.py
++ '[' -f /home/babak/abg_analyzer_pro/main.py ']'
++ cp -a /home/babak/abg_analyzer_pro/main.py /home/babak/abg_analyzer_pro/repair_backups/20260814_175910/
++ log 'BACKUP: /home/babak/abg_analyzer_pro/main.py'
++ echo 'BACKUP: /home/babak/abg_analyzer_pro/main.py'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+BACKUP: /home/babak/abg_analyzer_pro/main.py
++ backup_file /home/babak/abg_analyzer_pro/auto_repair.sh
++ local f=/home/babak/abg_analyzer_pro/auto_repair.sh
++ '[' -f /home/babak/abg_analyzer_pro/auto_repair.sh ']'
++ cp -a /home/babak/abg_analyzer_pro/auto_repair.sh /home/babak/abg_analyzer_pro/repair_backups/20260814_175910/
++ log 'BACKUP: /home/babak/abg_analyzer_pro/auto_repair.sh'
++ echo 'BACKUP: /home/babak/abg_analyzer_pro/auto_repair.sh'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+BACKUP: /home/babak/abg_analyzer_pro/auto_repair.sh
++ log 'Backup completed.'
++ echo 'Backup completed.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+Backup completed.
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log '[2/10] Recording configuration...'
++ echo '[2/10] Recording configuration...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[2/10] Recording configuration...
++ echo
++ echo '=== buildozer.spec ==='
++ grep -n -E 'requirements|p4a.source_dir|p4a.url|p4a.branch|p4a.commit|android.api|android.minapi|android.ndk|android.ndk_path|android.archs' /home/babak/abg_analyzer_pro/buildozer.spec
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
+=== buildozer.spec ===
+15:requirements = python3,kivy==2.2.1
+16:p4a.source_dir = /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+20:android.api = 34
+21:android.minapi = 24
+22:android.ndk = 27c
+23:android.archs = arm64-v8a
++ echo
++ echo '=== Python ==='
+
+=== Python ===
++ python3 --version
+Python 3.10.12
++ echo
+
++ echo '=== Buildozer ==='
+=== Buildozer ===
++ buildozer --version
+Buildozer 1.6.0
++ echo
++ echo '=== Git ==='
+
++ git --version
+=== Git ===
+git version 2.34.1
++ echo
++ echo '=== NDK ==='
++ find /home/babak/.buildozer/android/platform -maxdepth 2 -type d -name 'android-ndk*'
+
+=== NDK ===
+/home/babak/.buildozer/android/platform/android-ndk-r27c
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log '[3/10] Testing DNS...'
++ echo '[3/10] Testing DNS...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[3/10] Testing DNS...
++ getent hosts github.com
++ log 'DNS: PASS'
++ echo 'DNS: PASS'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+DNS: PASS
++ cat /tmp/abg_github_dns
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+140.82.121.4    github.com
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log '[4/10] Testing IPv4 connectivity...'
++ echo '[4/10] Testing IPv4 connectivity...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[4/10] Testing IPv4 connectivity...
++ IPV4_OK=0
++ test_url 'GitHub IPv4 HTTPS' https://github.com
++ local 'name=GitHub IPv4 HTTPS'
++ local url=https://github.com
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log 'TEST: GitHub IPv4 HTTPS'
++ echo 'TEST: GitHub IPv4 HTTPS'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+TEST: GitHub IPv4 HTTPS
++ log 'URL : https://github.com'
++ echo 'URL : https://github.com'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+URL : https://github.com
++ curl -4 -I -L --connect-timeout 8 --max-time 15 -sS https://github.com
++ log 'RESULT: PASS'
++ echo 'RESULT: PASS'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+RESULT: PASS
++ return 0
++ IPV4_OK=1
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log '[5/10] Testing IPv6 connectivity...'
++ echo '[5/10] Testing IPv6 connectivity...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[5/10] Testing IPv6 connectivity...
++ curl -6 -I --connect-timeout 8 --max-time 12 -sS https://github.com
++ log 'IPv6: FAIL (not necessarily a problem)'
++ echo 'IPv6: FAIL (not necessarily a problem)'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+IPv6: FAIL (not necessarily a problem)
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log '[6/10] Testing GitHub Git access...'
++ echo '[6/10] Testing GitHub Git access...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[6/10] Testing GitHub Git access...
++ GIT_OK=0
++ test_git 'GitHub JPEG repository' https://github.com/libsdl-org/jpeg.git
++ local 'name=GitHub JPEG repository'
++ local url=https://github.com/libsdl-org/jpeg.git
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log 'TEST: GitHub JPEG repository'
++ echo 'TEST: GitHub JPEG repository'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+TEST: GitHub JPEG repository
++ log 'GIT : https://github.com/libsdl-org/jpeg.git'
++ echo 'GIT : https://github.com/libsdl-org/jpeg.git'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+GIT : https://github.com/libsdl-org/jpeg.git
++ timeout 20 git ls-remote https://github.com/libsdl-org/jpeg.git HEAD
++ log 'RESULT: FAIL'
++ echo 'RESULT: FAIL'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+RESULT: FAIL
++ return 1
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log '[7/10] Testing Windows network from WSL...'
++ echo '[7/10] Testing Windows network from WSL...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[7/10] Testing Windows network from WSL...
++ WINDOWS_IP=
++ command -v powershell.exe
++ log 'PowerShell detected.'
++ echo 'PowerShell detected.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+PowerShell detected.
+++ powershell.exe -NoProfile -Command 'try {
+            $r = Test-NetConnection github.com -Port 443 -WarningAction SilentlyContinue
+            if ($r.TcpTestSucceeded) { '\''WINDOWS_GITHUB_443=PASS'\'' }
+            else { '\''WINDOWS_GITHUB_443=FAIL'\'' }
+        } catch {
+            '\''WINDOWS_GITHUB_443=ERROR'\''
+        }'
+++ tr -d '\r'
++ WIN_RESULT=WINDOWS_GITHUB_443=PASS
++ log WINDOWS_GITHUB_443=PASS
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
++ echo WINDOWS_GITHUB_443=PASS
+WINDOWS_GITHUB_443=PASS
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log '[8/10] Inspecting existing JPEG checkout/cache...'
++ echo '[8/10] Inspecting existing JPEG checkout/cache...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[8/10] Inspecting existing JPEG checkout/cache...
++ JPEG_DIR=/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg
++ '[' -d /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg/.git ']'
++ log 'JPEG checkout: NOT FOUND'
++ echo 'JPEG checkout: NOT FOUND'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+JPEG checkout: NOT FOUND
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log '[9/10] Inspecting p4a/NDK configuration...'
++ echo '[9/10] Inspecting p4a/NDK configuration...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[9/10] Inspecting p4a/NDK configuration...
++ P4A_DIR=/home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
++ '[' -d /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android ']'
++ python3 -
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+p4a version = 2026.05.09
+p4a path    = /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android/pythonforandroid/__init__.py
+recommended = 28c
+minimum    = 25
+maximum    = 25
+API        = 24
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log '[10/10] Automatic Windows-assisted JPEG repair...'
++ echo '[10/10] Automatic Windows-assisted JPEG repair...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[10/10] Automatic Windows-assisted JPEG repair...
++ JPEG_PARENT=/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external
++ JPEG_DIR=/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg
++ WINDOWS_TMP=
++ command -v powershell.exe
+++ powershell.exe -NoProfile -Command '[System.IO.Path]::GetTempPath()'
+++ tr -d '\r\n'
++ WIN_TMP='C:\Users\Emd\AppData\Local\Temp\'
++ WIN_TMP='C:\Users\Emd\AppData\Local\Temp\'
++ log 'Windows temporary directory: C:\Users\Emd\AppData\Local\Temp\'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
++ echo 'Windows temporary directory: C:\Users\Emd\AppData\Local\Temp\'
+Windows temporary directory: C:\Users\Emd\AppData\Local\Temp\
++ WIN_ARCHIVE_WIN='C:\Users\Emd\AppData\Local\Temp\\abg-jpeg-v9e-SDL.zip'
++ WIN_EXTRACT_WIN='C:\Users\Emd\AppData\Local\Temp\\abg-jpeg-v9e-SDL'
+++ wslpath 'C:\Users\Emd\AppData\Local\Temp\\abg-jpeg-v9e-SDL.zip'
++ WIN_ARCHIVE_WSL=/mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-v9e-SDL.zip
+++ wslpath 'C:\Users\Emd\AppData\Local\Temp\\abg-jpeg-v9e-SDL'
++ WIN_EXTRACT_WSL=/mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-v9e-SDL
++ log 'Downloading SDL2 JPEG source through Windows...'
++ echo 'Downloading SDL2 JPEG source through Windows...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+Downloading SDL2 JPEG source through Windows...
++ POWERSHELL_SCRIPT='
+        $ErrorActionPreference = "Stop"
+        $url = "https://github.com/libsdl-org/jpeg/archive/refs/heads/v9e-SDL.zip"
+        $archive = "C:\Users\Emd\AppData\Local\Temp\\abg-jpeg-v9e-SDL.zip"
+        $extract = "C:\Users\Emd\AppData\Local\Temp\\abg-jpeg-v9e-SDL"
+
+        if (Test-Path -LiteralPath $archive) {
+            Remove-Item -LiteralPath $archive -Force
+        }
+
+        if (Test-Path -LiteralPath $extract) {
+            Remove-Item -LiteralPath $extract -Recurse -Force
+        }
+
+        Write-Output "WINDOWS_JPEG_DOWNLOAD_START"
+
+          Invoke-WebRequest `
+              -Uri $url `
+              -OutFile $archive
+
+          if (-not (Test-Path -LiteralPath $archive)) {
+              throw "JPEG ZIP was not downloaded"
+          }
+
+          Write-Output "WINDOWS_JPEG_ARCHIVE=PASS"
+
+          Expand-Archive `
+              -LiteralPath $archive `
+              -DestinationPath $extract `
+              -Force
+
+        if (-not (Test-Path -LiteralPath $extract)) {
+            throw "JPEG archive extraction failed"
+        }
+
+        Write-Output "WINDOWS_JPEG_EXTRACT=PASS"
+      '
++ powershell.exe -NoProfile -Command '
+        $ErrorActionPreference = "Stop"
+        $url = "https://github.com/libsdl-org/jpeg/archive/refs/heads/v9e-SDL.zip"
+        $archive = "C:\Users\Emd\AppData\Local\Temp\\abg-jpeg-v9e-SDL.zip"
+        $extract = "C:\Users\Emd\AppData\Local\Temp\\abg-jpeg-v9e-SDL"
+
+        if (Test-Path -LiteralPath $archive) {
+            Remove-Item -LiteralPath $archive -Force
+        }
+
+        if (Test-Path -LiteralPath $extract) {
+            Remove-Item -LiteralPath $extract -Recurse -Force
+        }
+
+        Write-Output "WINDOWS_JPEG_DOWNLOAD_START"
+
+          Invoke-WebRequest `
+              -Uri $url `
+              -OutFile $archive
+
+          if (-not (Test-Path -LiteralPath $archive)) {
+              throw "JPEG ZIP was not downloaded"
+          }
+
+          Write-Output "WINDOWS_JPEG_ARCHIVE=PASS"
+
+          Expand-Archive `
+              -LiteralPath $archive `
+              -DestinationPath $extract `
+              -Force
+
+        if (-not (Test-Path -LiteralPath $extract)) {
+            throw "JPEG archive extraction failed"
+        }
+
+        Write-Output "WINDOWS_JPEG_EXTRACT=PASS"
+      '
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+WINDOWS_JPEG_DOWNLOAD_START
+WINDOWS_JPEG_ARCHIVE=PASS
+WINDOWS_JPEG_EXTRACT=PASS
++ grep -q WINDOWS_JPEG_ARCHIVE=PASS /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
++ grep -q WINDOWS_JPEG_EXTRACT=PASS /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
++ echo WINDOWS_JPEG_DOWNLOAD=PASS
++ grep -q WINDOWS_JPEG_DOWNLOAD=PASS /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
++ log 'Windows successfully downloaded JPEG.'
++ echo 'Windows successfully downloaded JPEG.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+Windows successfully downloaded JPEG.
++ EXTRACTED_DIR=
++ KNOWN_WIN_JPEG=/mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test
++ '[' -d /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test ']'
++ log 'Checking known Windows extraction path...'
++ echo 'Checking known Windows extraction path...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+Checking known Windows extraction path...
+++ find /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test -maxdepth 2 -type d -name 'jpeg-*' -print -quit
++ EXTRACTED_DIR=/mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL
++ '[' -z /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL ']'
++ '[' -z /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL ']'
++ '[' -z /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL ']'
++ log 'JPEG source located successfully:'
++ echo 'JPEG source located successfully:'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+JPEG source located successfully:
++ log /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL
++ echo /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+/mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL
++ '[' -n /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL ']'
++ '[' -d /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL ']'
++ log 'Found extracted JPEG source:'
++ echo 'Found extracted JPEG source:'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+Found extracted JPEG source:
++ log /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL
++ echo /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+/mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL
++ mkdir -p /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external
++ '[' -e /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg ']'
+++ date +%H%M%S
++ SAFE_JPEG_BACKUP=/home/babak/abg_analyzer_pro/repair_backups/20260814_175910/jpeg_existing_175943
++ log 'Existing JPEG directory detected.'
++ echo 'Existing JPEG directory detected.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+Existing JPEG directory detected.
++ log 'Moving it safely to:'
++ echo 'Moving it safely to:'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+Moving it safely to:
++ log /home/babak/abg_analyzer_pro/repair_backups/20260814_175910/jpeg_existing_175943
++ echo /home/babak/abg_analyzer_pro/repair_backups/20260814_175910/jpeg_existing_175943
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+/home/babak/abg_analyzer_pro/repair_backups/20260814_175910/jpeg_existing_175943
++ mv /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg /home/babak/abg_analyzer_pro/repair_backups/20260814_175910/jpeg_existing_175943
++ cp -a /mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg
++ '[' -d /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg ']'
++ log 'LOCAL JPEG SOURCE INSTALL: PASS'
++ echo 'LOCAL JPEG SOURCE INSTALL: PASS'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+LOCAL JPEG SOURCE INSTALL: PASS
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log '[11/11] Verifying local JPEG source...'
++ echo '[11/11] Verifying local JPEG source...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[11/11] Verifying local JPEG source...
++ '[' -d /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg ']'
++ log 'JPEG directory exists:'
++ echo 'JPEG directory exists:'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+JPEG directory exists:
++ log /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg
++ echo /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg
++ '[' -f /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg/CMakeLists.txt ']'
++ log 'JPEG source verification: PASS'
++ echo 'JPEG source verification: PASS'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+JPEG source verification: PASS
++ JPEG_READY=1
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log ============================================================
++ echo ============================================================
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+============================================================
++ log ' WINDOWS-ASSISTED REPAIR RESULT'
++ echo ' WINDOWS-ASSISTED REPAIR RESULT'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+ WINDOWS-ASSISTED REPAIR RESULT
++ log ============================================================
++ echo ============================================================
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+============================================================
++ '[' 1 -eq 1 ']'
++ log 'JPEG dependency has been supplied locally.'
++ echo 'JPEG dependency has been supplied locally.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+JPEG dependency has been supplied locally.
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log 'The next build can now retry SDL2_image without'
++ echo 'The next build can now retry SDL2_image without'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+The next build can now retry SDL2_image without
++ log 'requiring WSL to clone github.com/libsdl-org/jpeg.git.'
++ echo 'requiring WSL to clone github.com/libsdl-org/jpeg.git.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+requiring WSL to clone github.com/libsdl-org/jpeg.git.
++ log ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
++ echo ''
+
++ log IMPORTANT:
++ echo IMPORTANT:
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+IMPORTANT:
++ log 'No .buildozer directory was deleted.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
++ echo 'No .buildozer directory was deleted.'
+No .buildozer directory was deleted.
++ log 'No ~/.buildozer directory was deleted.'
++ echo 'No ~/.buildozer directory was deleted.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+No ~/.buildozer directory was deleted.
++ log 'No NDK was changed.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
++ echo 'No NDK was changed.'
+No NDK was changed.
++ log 'No Kivy version was changed.'
++ echo 'No Kivy version was changed.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+No Kivy version was changed.
++ log 'No python-for-android version was changed.'
++ echo 'No python-for-android version was changed.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+No python-for-android version was changed.
++ log ''
++ echo ''
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+
++ log '[10/10] Automatic decision...'
++ echo '[10/10] Automatic decision...'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+[10/10] Automatic decision...
++ echo
+
++ echo ============================================================
+============================================================
++ echo ' AUTOMATIC DIAGNOSIS'
+ AUTOMATIC DIAGNOSIS
++ echo ============================================================
+============================================================
++ '[' 0 -eq 1 ']'
++ '[' 1 -eq 1 ']'
++ log 'GitHub HTTPS works, but Git clone failed.'
++ echo 'GitHub HTTPS works, but Git clone failed.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+GitHub HTTPS works, but Git clone failed.
++ log 'Likely Git-specific configuration/problem.'
++ echo 'Likely Git-specific configuration/problem.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+Likely Git-specific configuration/problem.
++ log 'No destructive repair performed.'
++ echo 'No destructive repair performed.'
++ tee -a /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+No destructive repair performed.
++ echo
+
++ echo ============================================================
+============================================================
++ echo ' SAFETY STATUS'
+ SAFETY STATUS
++ echo ============================================================
+============================================================
++ echo 'NO rm -rf .buildozer'
+NO rm -rf .buildozer
++ echo 'NO rm -rf ~/.buildozer'
+NO rm -rf ~/.buildozer
++ echo 'NO NDK replacement'
+NO NDK replacement
++ echo 'NO Kivy replacement'
+NO Kivy replacement
++ echo 'NO p4a replacement'
+NO p4a replacement
++ echo
+
++ echo Backup:
+Backup:
++ echo /home/babak/abg_analyzer_pro/repair_backups/20260814_175910
+/home/babak/abg_analyzer_pro/repair_backups/20260814_175910
++ echo
+
++ echo Log:
+Log:
++ echo /home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
+/home/babak/abg_analyzer_pro/auto_repair_20260814_175910.log
++ echo ============================================================
+============================================================
++ rm -f /tmp/abg_github_dns

@@ -1,0 +1,78 @@
+class TripleDisorderEngine:
+
+    @staticmethod
+    def analyze(
+        primary_disorder,
+        compensation_result=None,
+        delta_ratio=None
+    ):
+
+        disorders = []
+
+        # --------------------------------------------------
+        # Primary metabolic disorder
+        # --------------------------------------------------
+
+        if primary_disorder == "Metabolic Acidosis":
+
+            disorders.append("Metabolic Acidosis")
+
+        elif primary_disorder == "Metabolic Alkalosis":
+
+            disorders.append("Metabolic Alkalosis")
+
+        # --------------------------------------------------
+        # Respiratory component
+        # --------------------------------------------------
+
+        if compensation_result:
+
+            if compensation_result.status == "SUPERIMPOSED_RESP_ACIDOSIS":
+
+                disorders.append("Respiratory Acidosis")
+
+            elif compensation_result.status == "SUPERIMPOSED_RESP_ALKALOSIS":
+
+                disorders.append("Respiratory Alkalosis")
+
+        # --------------------------------------------------
+        # Additional metabolic component from Delta Ratio
+        # --------------------------------------------------
+
+        if delta_ratio:
+
+            status = delta_ratio.get("status")
+
+            if status == "HAGMA_PLUS_NAGMA":
+
+                if "Normal Anion Gap Metabolic Acidosis" not in disorders:
+
+                    disorders.append(
+                        "Additional Normal Anion Gap Metabolic Acidosis"
+                    )
+
+            elif status == "HAGMA_PLUS_METABOLIC_ALKALOSIS":
+
+                if "Metabolic Alkalosis" not in disorders:
+
+                    disorders.append(
+                        "Additional Metabolic Alkalosis"
+                    )
+
+        # --------------------------------------------------
+        # Triple disorder
+        # --------------------------------------------------
+
+        if len(disorders) >= 3:
+
+            return {
+                "triple_disorder": True,
+                "disorders": disorders,
+                "message": "Triple acid-base disorder detected."
+            }
+
+        return {
+            "triple_disorder": False,
+            "disorders": disorders,
+            "message": "No triple disorder detected."
+        }

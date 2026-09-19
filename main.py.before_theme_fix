@@ -1,0 +1,75 @@
+from kivy.lang import Builder
+from kivymd.app import MDApp
+
+from core.abg_engine import ABGEngine
+from widgets.header_card import HeaderCard
+from widgets.input_card import InputCard
+from widgets.result_card import ResultCard
+
+
+KV = """
+MDScreen:
+    md_bg_color: app.theme_cls.backgroundColor
+
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: "12dp"
+        spacing: "12dp"
+
+        ScrollView:
+            do_scroll_x: False
+
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: "12dp"
+                size_hint_y: None
+                height: self.minimum_height
+
+                HeaderCard:
+                    size_hint_y: None
+                    height: "110dp"
+
+                InputCard:
+                    id: input_card
+                    size_hint_y: None
+                    height: "430dp"
+
+                ResultCard:
+                    id: result_card
+                    size_hint_y: None
+                    height: "420dp"
+"""
+
+
+class ABGApp(MDApp):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.engine = ABGEngine()
+
+    def build(self):
+        self.title = "ABG Analyzer Pro"
+
+        self.theme_cls.theme_style = "Light"
+        self.theme_cls.primary_palette = "Blue"
+
+        root = Builder.load_string(KV)
+
+        root.ids.input_card.analyze_callback = self.analyze
+
+        return root
+
+    def analyze(self, values):
+        try:
+            report = self.engine.analyze(**values)
+
+            self.root.ids.result_card.set_report(report)
+
+        except Exception as e:
+            self.root.ids.result_card.set_report(
+                f"Unexpected Error:\n\n{type(e).__name__}: {e}"
+            )
+
+
+if __name__ == "__main__":
+    ABGApp().run()

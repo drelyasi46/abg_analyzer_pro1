@@ -1,0 +1,35 @@
+from kivymd.uix.card import MDCard
+from kivymd.uix.label import MDLabel
+
+
+class HeaderCard(MDCard):
+
+    def __init__(self, **kwargs):
+        super().__init__(
+            orientation="vertical",
+            padding="16dp",
+            spacing="4dp",
+            radius=[16, 16, 16, 16],
+            elevation=2,
+            **kwargs
+        )
+
+        self.add_widget(
+            MDLabel(
+                text="ABG Analyzer Pro",
+                font_style="H5",
+                halign="center",
+                size_hint_y=None,
+                height="40dp",
+            )
+        )
+
+        self.add_widget(
+            MDLabel(
+                text="Arterial Blood Gas Analysis",
+                halign="center",
+                theme_text_color="Secondary",
+                size_hint_y=None,
+                height="28dp",
+            )
+        )

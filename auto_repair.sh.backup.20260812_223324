@@ -1,0 +1,273 @@
+#!/usr/bin/env bash
+
+set -u
+
+PROJECT="$HOME/abg_analyzer_pro"
+BUILD="$PROJECT/.buildozer"
+SPEC="$PROJECT/buildozer.spec"
+P4A="$BUILD/android/platform/python-for-android"
+BACKUP_ROOT="$PROJECT/repair_backups"
+
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+BACKUP="$BACKUP_ROOT/$TIMESTAMP"
+
+mkdir -p "$BACKUP"
+
+echo
+echo "============================================================"
+echo " ABG Analyzer Pro - Safe Auto Repair"
+echo "============================================================"
+echo "Project : $PROJECT"
+echo "Backup  : $BACKUP"
+echo
+
+# ------------------------------------------------------------
+# SAFE BACKUP
+# ------------------------------------------------------------
+
+echo "[1/8] Creating safe backup..."
+
+backup_file() {
+    local file="$1"
+
+    if [ -f "$file" ]; then
+        mkdir -p "$BACKUP/$(dirname "${file#$PROJECT/}")"
+        cp -a "$file" "$BACKUP/${file#$PROJECT/}"
+        echo "  BACKUP: $file"
+    fi
+}
+
+backup_file "$SPEC"
+backup_file "$PROJECT/main.py"
+backup_file "$PROJECT/requirements.txt"
+backup_file "$PROJECT/version.txt"
+backup_file "$PROJECT/.buildozer/config"
+
+if [ -d "$P4A" ]; then
+    mkdir -p "$BACKUP/p4a"
+    cp -a "$P4A/pythonforandroid/recommendations.py" \
+        "$BACKUP/p4a/" 2>/dev/null || true
+
+    cp -a "$P4A/pythonforandroid/__init__.py" \
+        "$BACKUP/p4a/" 2>/dev/null || true
+fi
+
+echo "  Backup completed."
+echo
+
+# ------------------------------------------------------------
+# PROJECT STATE
+# ------------------------------------------------------------
+
+echo "[2/8] Recording current configuration..."
+
+{
+    echo "DATE=$TIMESTAMP"
+    echo
+    echo "=== buildozer.spec ==="
+    grep -n -E \
+        "p4a.source_dir|p4a.url|p4a.branch|p4a.commit|p4a.fork|android.api|android.minapi|android.ndk|android.ndk_path|android.archs|requirements" \
+        "$SPEC" 2>/dev/null || true
+
+    echo
+    echo "=== Python ==="
+    python3 --version || true
+
+    echo
+    echo "=== Buildozer ==="
+    buildozer --version 2>/dev/null || true
+
+    echo
+    echo "=== Git ==="
+    git --version || true
+
+    echo
+    echo "=== NDK directories ==="
+    find "$HOME/.buildozer/android/platform" \
+        -maxdepth 2 \
+        -type d \
+        -name "android-ndk*" \
+        -print 2>/dev/null || true
+
+} > "$BACKUP/system_state.txt"
+
+cat "$BACKUP/system_state.txt"
+
+echo
+
+# ------------------------------------------------------------
+# NETWORK TEST
+# ------------------------------------------------------------
+
+echo "[3/8] Testing GitHub connectivity..."
+
+GITHUB_OK=0
+
+if curl -I \
+    --connect-timeout 10 \
+    --max-time 15 \
+    -sS \
+    https://github.com \
+    >/dev/null 2>&1
+then
+    GITHUB_OK=1
+fi
+
+if [ "$GITHUB_OK" -eq 1 ]; then
+    echo "  GitHub HTTPS: OK"
+else
+    echo "  GitHub HTTPS: FAILED"
+    echo
+    echo "  IMPORTANT:"
+    echo "  WSL cannot currently connect to github.com."
+    echo "  This is the direct cause of the current SDL2_image failure."
+    echo
+fi
+
+# ------------------------------------------------------------
+# GIT TEST
+# ------------------------------------------------------------
+
+echo "[4/8] Testing Git..."
+
+if git ls-remote \
+    https://github.com/libsdl-org/jpeg.git HEAD \
+    >/dev/null 2>&1
+then
+    echo "  GitHub git access: OK"
+else
+    echo "  GitHub git access: FAILED"
+fi
+
+echo
+
+# ------------------------------------------------------------
+# NDK CHECK
+# ------------------------------------------------------------
+
+echo "[5/8] Checking NDK..."
+
+NDK_DIR=""
+
+for d in \
+    "$HOME/.buildozer/android/platform/android-ndk-r27c" \
+    "$HOME/.buildozer/android/platform/android-ndk-r28c" \
+    "$HOME/.buildozer/android/platform/android-ndk-r26d" \
+    "$HOME/.buildozer/android/platform/android-ndk-r25b"
+do
+    if [ -d "$d" ]; then
+        NDK_DIR="$d"
+        break
+    fi
+done
+
+if [ -n "$NDK_DIR" ]; then
+    echo "  NDK found: $NDK_DIR"
+
+    if [ -x "$NDK_DIR/ndk-build" ]; then
+        "$NDK_DIR/ndk-build" --version 2>/dev/null | head -5
+    fi
+else
+    echo "  No NDK detected."
+fi
+
+echo
+
+# ------------------------------------------------------------
+# P4A CHECK
+# ------------------------------------------------------------
+
+echo "[6/8] Checking python-for-android..."
+
+if [ -f "$P4A/pythonforandroid/recommendations.py" ]; then
+
+    python3 -c "
+import sys
+sys.path.insert(0, '$P4A')
+
+from pythonforandroid import recommendations as r
+
+print('p4a recommended NDK =', r.RECOMMENDED_NDK_VERSION)
+print('p4a minimum NDK    =', r.MIN_NDK_VERSION)
+print('p4a maximum NDK    =', r.MAX_NDK_VERSION)
+print('p4a recommended API =', r.RECOMMENDED_NDK_API)
+" 2>&1
+
+else
+    echo "  python-for-android not found."
+fi
+
+echo
+
+# ------------------------------------------------------------
+# BUILD CACHE INSPECTION
+# ------------------------------------------------------------
+
+echo "[7/8] Inspecting failed SDL2_image checkout..."
+
+JPEG_DIR="$BUILD/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg"
+
+if [ -d "$JPEG_DIR" ]; then
+
+    echo "  JPEG directory exists:"
+    ls -lah "$JPEG_DIR"
+
+    echo
+    echo "  Git status:"
+    git -C "$JPEG_DIR" status 2>&1 || true
+
+else
+
+    echo "  JPEG checkout does not exist."
+fi
+
+echo
+
+# ------------------------------------------------------------
+# SAFE ACTION
+# ------------------------------------------------------------
+
+echo "[8/8] Selecting repair strategy..."
+echo
+
+if [ "$GITHUB_OK" -eq 0 ]; then
+
+    echo "============================================================"
+    echo " RESULT"
+    echo "============================================================"
+    echo
+    echo "The build environment is substantially configured correctly."
+    echo
+    echo "Current blocker:"
+    echo
+    echo "    WSL -> github.com:443 CONNECTION TIMEOUT"
+    echo
+    echo "The failed component is:"
+    echo
+    echo "    SDL2_image -> external/jpeg"
+    echo
+    echo "Therefore this script will NOT:"
+    echo
+    echo "    - delete .buildozer"
+    echo "    - change NDK"
+    echo "    - change python-for-android"
+    echo "    - change Kivy"
+    echo "    - delete build caches"
+    echo
+    echo "No destructive action was performed."
+    echo
+    echo "Backup:"
+    echo "    $BACKUP"
+    echo
+    exit 10
+
+fi
+
+echo "GitHub connectivity works."
+echo "No automatic destructive repair is necessary."
+echo
+echo "Backup:"
+echo "    $BACKUP"
+echo
+
+exit 0

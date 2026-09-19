@@ -1,0 +1,19 @@
+Universal Build Doctor Report
+==============================
+
+Date: Sun Aug 16 19:07:12 +0330 2026
+Project: /home/babak/abg_analyzer_pro
+
+Python: 3.10
+Requirements: python3==3.11.5,kivy==2.2.1
+Android API: 34
+Android NDK: 27c
+Architectures: arm64-v8a
+
+Build success: 0
+
+Build log:
+/home/babak/abg_analyzer_pro/.apk_builder_logs/build_20260816_190646.log
+
+Artifacts:
+

@@ -1,0 +1,69 @@
+class TripleDisorderEngine:
+
+    @staticmethod
+    def analyze(
+        primary_disorder,
+        compensation_result=None,
+        delta_ratio=None,
+        anion_gap=None
+    ):
+
+        disorders = []
+
+        # Primary disorder
+        if primary_disorder not in (None, "Normal"):
+            disorders.append(primary_disorder)
+
+        # Respiratory / metabolic disorder detected by compensation
+        if compensation_result is not None:
+
+            status = compensation_result.status
+
+            mapping = {
+                "SUPERIMPOSED_RESP_ACIDOSIS":
+                    "Respiratory Acidosis",
+
+                "SUPERIMPOSED_RESP_ALKALOSIS":
+                    "Respiratory Alkalosis",
+
+                "SUPERIMPOSED_METABOLIC_ACIDOSIS":
+                    "Metabolic Acidosis",
+
+                "SUPERIMPOSED_METABOLIC_ALKALOSIS":
+                    "Metabolic Alkalosis",
+            }
+
+            additional = mapping.get(status)
+
+            if additional is not None:
+                disorders.append(additional)
+
+        # Delta-ratio metabolic component
+        if delta_ratio is not None:
+
+            if delta_ratio >= 2:
+                disorders.append(
+                    "Additional Metabolic Alkalosis"
+                )
+
+            elif delta_ratio < 0.4:
+                disorders.append(
+                    "Additional Normal Anion Gap Metabolic Acidosis"
+                )
+
+        # Remove duplicates
+        disorders = list(dict.fromkeys(disorders))
+
+        # A triple disorder requires at least 3 distinct processes
+        if len(disorders) >= 3:
+            return {
+                "triple_disorder": True,
+                "disorders": disorders,
+                "message": "Triple acid-base disorder detected."
+            }
+
+        return {
+            "triple_disorder": False,
+            "disorders": disorders,
+            "message": "No triple disorder detected."
+        }

@@ -1,0 +1,30 @@
+[16:05:33] === CONFIGURING BUILD ENVIRONMENT ===
+[16:05:33] OPENSSL LOCAL: /home/babak/p4a-local/openssl
+[16:05:33] P4A_SOURCE_DIR: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+[16:05:33] PYTHONPATH: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+[16:05:33] === P4A PREFLIGHT ===
+[16:05:33] $ /home/babak/ube/.venv/bin/python3 -c 
+import os
+import sys
+
+print("PYTHON:", sys.executable)
+print("P4A_OPENSSL_DIR:", os.environ.get("P4A_OPENSSL_DIR"))
+print("P4A_SOURCE_DIR:", os.environ.get("P4A_SOURCE_DIR"))
+
+try:
+    import pythonforandroid
+    import pythonforandroid.recipe
+
+    print("P4A PACKAGE:", pythonforandroid.__file__)
+    print("P4A RECIPE:", pythonforandroid.recipe.__file__)
+
+except Exception as exc:
+    print("P4A IMPORT ERROR:", repr(exc))
+    sys.exit(2)
+
+PYTHON: /home/babak/ube/.venv/bin/python3
+P4A_OPENSSL_DIR: /home/babak/p4a-local/openssl
+P4A_SOURCE_DIR: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+P4A PACKAGE: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android/pythonforandroid/__init__.py
+P4A RECIPE: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android/pythonforandroid/recipe.py
+[16:05:33] P4A PREFLIGHT: OK

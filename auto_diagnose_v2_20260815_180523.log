@@ -1,0 +1,88 @@
+============================================================
+       ABG ANALYZER PRO - DIAGNOSTIC ENGINE v2
+============================================================
+
+===== ENVIRONMENT =====
+System Python : Python 3.10.12
+Buildozer     : Buildozer 1.6.0
+Cython        : Cython version 0.29.37
+
+===== CONFIGURATION =====
+requirements = python3==3.12.10,kivy==2.2.1
+android.api = 34
+android.minapi = 24
+android.ndk = 27c
+android.archs = arm64-v8a
+
+===== VERSION MATRIX =====
+Requested Python : 3.12.10
+P4A python3      : 3.14.2
+P4A hostpython3  : 3.14.2
+Requested Kivy   : 2.2.1
+
+===== DIAGNOSIS =====
+[CRITICAL] PYTHON RECIPE MISMATCH
+           buildozer.spec requests Python 3.12.10
+           p4a recipe provides Python 3.14.2
+
+===== LAST REAL BUILD LOG =====
+Log: /home/babak/abg_analyzer_pro/auto_repair_20260815_175612.log
+
+--- ERROR SIGNATURES ---
+[CRITICAL] SRE module mismatch
+           Classification: PYTHON_BUILD_CORRUPTION_OR_VERSION_MIX
+
+--- IMPORTANT BUILD LINES ---
+Cython:
+Cython version 0.29.37
+Cython:
+Cython version 0.29.37
+# Search for Cython (cython)
+# Run '/usr/bin/python3 -m pythonforandroid.toolchain create --dist_name=abganalyzer --bootstrap=sdl2 --requirements=python3==3.12.10,kivy==2.2.1 --arch=arm64-v8a --copy-libs --color=always --storage-dir=/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a --ndk-api=24 --ignore-setup-py --debug' ...
+[1m[INFO][0m:    Recipe python3: version "3.12.10" requested
+[1m[90m[DEBUG][39m[0m:   	/usr/bin/install -c /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Lib/cgi.py /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/native-build/root/usr/local/lib/python3.12
+[1m[90m[DEBUG][39m[0m:   	/usr/bin/install -c -m 644 /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Lib/cgitb.py /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/native-build/root/usr/local/lib/python3.12
+[1m[90m[DEBUG][39m[0m:   	/usr/bin/install -c -m 644 /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Lib/test/test_cgi.py /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/native-build/root/usr/local/lib/python3.12/test
+[1m[90m[DEBUG][39m[0m:   	/usr/bin/install -c -m 644 /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Lib/test/test_cgitb.py /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/native-build/root/usr/local/lib/python3.12/test
+[1m[90m[DEBUG][39m[0m:   	Compiling '/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/native-build/root/usr/local/lib/python3.12/cgi.py'...
+[1m[90m[DEBUG][39m[0m:   	Compiling '/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/native-build/root/usr/local/lib/python3.12/cgitb.py'...
+[1m[90m[DEBUG][39m[0m:   	Compiling '/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/native-build/root/usr/local/lib/python3.12/test/test_cgi.py'...
+[1m[90m[DEBUG][39m[0m:   	Compiling '/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/native-build/root/usr/local/lib/python3.12/test/test_cgitb.py'...
+[1m[90m[DEBUG][39m[0m:   	    assert _sre.MAGIC == MAGIC, "SRE module mismatch"
+[1m[90m[DEBUG][39m[0m:   	AssertionError: SRE module mismatch
+    assert _sre.MAGIC == MAGIC, "SRE module mismatch"
+AssertionError: SRE module mismatch
+    assert _sre.MAGIC == MAGIC, "SRE module mismatch"
+AssertionError: SRE module mismatch
+# Command failed: ('/usr/bin/python3', '-m', 'pythonforandroid.toolchain', 'create', '--dist_name=abganalyzer', '--bootstrap=sdl2', '--requirements=python3==3.12.10,kivy==2.2.1', '--arch=arm64-v8a', '--copy-libs', '--color=always', '--storage-dir=/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a', '--ndk-api=24', '--ignore-setup-py', '--debug')
+# Error code: 1
+[1m[INFO][0m:    Recipe python3: version "3.12.10" requested
+--- Cython errors ---
+Cython:
+Cython version 0.29.37
+Cython:
+Cython version 0.29.37
+# Search for Cython (cython)
+--- Cython errors ---
+[1m[90m[DEBUG][39m[0m:   	AssertionError: SRE module mismatch
+AssertionError: SRE module mismatch
+AssertionError: SRE module mismatch
+# Command failed: ('/usr/bin/python3', '-m', 'pythonforandroid.toolchain', 'create', '--dist_name=abganalyzer', '--bootstrap=sdl2', '--requirements=python3==3.12.10,kivy==2.2.1', '--arch=arm64-v8a', '--copy-libs', '--color=always', '--storage-dir=/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a', '--ndk-api=24', '--ignore-setup-py', '--debug')
+
+===== BUILD STATE =====
+ABSENT : /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/python3
+ABSENT : /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3
+ABSENT : /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/packages/python3
+ABSENT : /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/packages/hostpython3
+ABSENT : /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/dists/abganalyzer
+
+============================================================
+DIAGNOSIS: 2 PROBLEM(S) DETECTED
+
+IMPORTANT:
+This diagnostic engine did NOT modify the project.
+No repair was performed.
+
+Diagnostic log:
+auto_diagnose_v2_20260815_180523.log
+============================================================

@@ -1,0 +1,69 @@
+class TripleDisorderEngine:
+
+    @staticmethod
+    def analyze(
+        compensation_result,
+        delta_ratio=None
+    ):
+
+        disorders = []
+
+        if compensation_result is None:
+            return {
+                "triple_disorder": False,
+                "disorders": [],
+                "message": "No acid-base disorder detected."
+            }
+
+        status = compensation_result.status
+
+        # -----------------------------------------
+        # Respiratory component
+        # -----------------------------------------
+        if status == "SUPERIMPOSED_RESP_ACIDOSIS":
+            disorders.append("Respiratory Acidosis")
+
+        elif status == "SUPERIMPOSED_RESP_ALKALOSIS":
+            disorders.append("Respiratory Alkalosis")
+
+        # -----------------------------------------
+        # Additional metabolic component
+        # -----------------------------------------
+        if status == "SUPERIMPOSED_METABOLIC_ACIDOSIS":
+            disorders.append("Metabolic Acidosis")
+
+        elif status == "SUPERIMPOSED_METABOLIC_ALKALOSIS":
+            disorders.append("Metabolic Alkalosis")
+
+        # -----------------------------------------
+        # Delta ratio component
+        # -----------------------------------------
+        if delta_ratio is not None:
+
+            if delta_ratio >= 2:
+                disorders.append("Additional Metabolic Alkalosis")
+
+            elif delta_ratio < 0.4:
+                disorders.append(
+                    "Additional Normal Anion Gap Metabolic Acidosis"
+                )
+
+        # Remove duplicates while preserving order
+        disorders = list(dict.fromkeys(disorders))
+
+        # -----------------------------------------
+        # Triple disorder
+        # -----------------------------------------
+        if len(disorders) >= 3:
+
+            return {
+                "triple_disorder": True,
+                "disorders": disorders,
+                "message": "Triple acid-base disorder detected."
+            }
+
+        return {
+            "triple_disorder": False,
+            "disorders": disorders,
+            "message": "No triple disorder detected."
+        }

@@ -1,0 +1,174 @@
+==============================================
+       ABG ANALYZER PRO - ENGINE DIAG
+==============================================
+
+[1] SYSTEM
+Ubuntu:
+Ubuntu 22.04.5 LTS
+Kernel:
+Linux DESKTOP-PCN5DAG 6.18.33.1-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Fri Jun  5 01:12:21 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+
+[2] PROJECT
+PWD: /home/babak/abg_analyzer_pro
+
+--- buildozer.spec ---
+title = ABG Analyzer Pro
+package.name = abganalyzer
+package.domain = drelyasibabak.ir
+requirements = python3==3.11.5,kivy==2.2.1
+p4a.source_dir = /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+android.api = 34
+android.minapi = 24
+android.ndk = 30
+android.archs = arm64-v8a
+android.ndk_path = /mnt/c/Users/Emd/AppData/Local/Android/Sdk/ndk/30.0.15729638
+android.sdk_path = /mnt/c/Users/Emd/AppData/Local/Android/Sdk
+
+[3] PYTHON
+/usr/bin/python3
+Python 3.10.12
+pip 26.1.2 from /home/babak/.local/lib/python3.10/site-packages/pip (python 3.10)
+
+[4] BUILDOZER
+/home/babak/.local/bin/buildozer
+Buildozer 1.6.0
+
+[5] PYTHON-FOR-ANDROID
+p4a directory: FOUND
+true
+957a3e5f
+ D ../../../../pythonforandroid/__init__.py
+ D ../../../../pythonforandroid/androidndk.py
+ D ../../../../pythonforandroid/archs.py
+ D ../../../../pythonforandroid/bdistapk.py
+ D ../../../../pythonforandroid/bootstrap.py
+ D ../../../../pythonforandroid/bootstraps/__init__.py
+ D ../../../../pythonforandroid/bootstraps/common/build/ant.properties
+ D ../../../../pythonforandroid/bootstraps/common/build/build.py
+ D ../../../../pythonforandroid/bootstraps/common/build/gradle/wrapper/gradle-wrapper.jar
+ D ../../../../pythonforandroid/bootstraps/common/build/gradle/wrapper/gradle-wrapper.properties
+ D ../../../../pythonforandroid/bootstraps/common/build/gradlew
+ D ../../../../pythonforandroid/bootstraps/common/build/gradlew.bat
+ D ../../../../pythonforandroid/bootstraps/common/build/jni/Android.mk
+ D ../../../../pythonforandroid/bootstraps/common/build/jni/application/Android.mk
+ D ../../../../pythonforandroid/bootstraps/common/build/jni/application/src/Android.mk
+ D ../../../../pythonforandroid/bootstraps/common/build/jni/application/src/start.c
+ D ../../../../pythonforandroid/bootstraps/common/build/src/main/java/org/kamranzafar/jtar/Octal.java
+ D ../../../../pythonforandroid/bootstraps/common/build/src/main/java/org/kamranzafar/jtar/TarConstants.java
+ D ../../../../pythonforandroid/bootstraps/common/build/src/main/java/org/kamranzafar/jtar/TarEntry.java
+ D ../../../../pythonforandroid/bootstraps/common/build/src/main/java/org/kamranzafar/jtar/TarHeader.java
+
+[6] ANDROID SDK
+SDK: FOUND -> /mnt/c/Users/Emd/AppData/Local/Android/Sdk
+
+Platforms:
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-17
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-22
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-23
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-25
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-27
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-28
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-29
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-30
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-31
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-33
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-33-ext4
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-33-ext5
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-34-ext11
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-34-ext8
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-36-ext19
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-37.0
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-37.1
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-37.2-beta1
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/platforms/android-CANARY
+
+Build-tools:
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/build-tools/34.0.0
+
+NDK:
+/mnt/c/Users/Emd/AppData/Local/Android/Sdk/ndk/30.0.15729638
+
+[7] SDKMANAGER
+sdkmanager: FOUND
+WARNING: The SDK Manager CLI tool (sdkmanager) is deprecated. Use Android CLI instead.
+The 'android' binary can also be found in the cmdline-tools directory, and 'android sdk' is the replacement for 'sdkmanager'.
+To learn more about the Android CLI and how to use it, see the documentation (https://d.android.com/tools/agents/android-cli)
+
+Error: Could not determine SDK root.
+Error: Either specify it explicitly with --sdk_root= or move this package into its expected location: <sdk>/cmdline-tools/latest/
+
+[8] ADB
+ADB: FOUND
+Android Debug Bridge version 1.0.41
+Version 37.0.1-15733141
+Installed as C:\Users\Emd\AppData\Local\Android\Sdk\platform-tools\adb.exe
+Running on Windows 10.0.19045
+
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+List of devices attached
+
+
+[9] BUILD CACHE
+.buildozer size:
+1.3G	.buildozer
+
+Downloaded archives:
+.buildozer/android/platform/build-arm64-v8a/packages/openssl/openssl-1.1.1w.tar.gz
+.buildozer/android/platform/build-arm64-v8a/packages/openssl/.mark-openssl-1.1.1w.tar.gz
+.buildozer/android/platform/build-arm64-v8a/packages/libffi/v3.4.2.tar.gz
+.buildozer/android/platform/build-arm64-v8a/packages/libffi/.mark-v3.4.2.tar.gz
+.buildozer/android/platform/build-arm64-v8a/packages/sdl2_mixer/.mark-SDL2_mixer-2.6.3.tar.gz
+.buildozer/android/platform/build-arm64-v8a/packages/sdl2_mixer/SDL2_mixer-2.6.3.tar.gz
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/setuptools/arm64-v8a__ndk_target_24/setuptools/pkg_resources/tests/data/my-test-package-zip/my-test-package.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/python3/arm64-v8a__ndk_target_24/python3/Tools/peg_generator/data/xxl.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/python3/arm64-v8a__ndk_target_24/python3/Lib/test/test_importlib/zipdata01/ziptestdata.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/python3/arm64-v8a__ndk_target_24/python3/Lib/test/test_importlib/namespace_pkgs/missing_directory.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/python3/arm64-v8a__ndk_target_24/python3/Lib/test/test_importlib/namespace_pkgs/top_level_portion1.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/python3/arm64-v8a__ndk_target_24/python3/Lib/test/test_importlib/namespace_pkgs/nested_portion1.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/python3/arm64-v8a__ndk_target_24/python3/Lib/test/test_importlib/zipdata02/ziptestdata.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/python3/arm64-v8a__ndk_target_24/python3/Lib/test/zip_cp437_header.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/python3/arm64-v8a__ndk_target_24/python3/Lib/test/zipdir.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/kivy/arm64-v8a__ndk_target_24/kivy/kivy/tests/unicode_font.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/kivy/arm64-v8a__ndk_target_24/kivy/kivy/tests/unicode_files.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/kivy/arm64-v8a__ndk_target_24/kivy/kivy/data/images/image-loading.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/kivy/arm64-v8a__ndk_target_24/kivy/examples/widgets/sequenced_images/data/images/info.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/kivy/arm64-v8a__ndk_target_24/kivy/examples/widgets/sequenced_images/data/images/cube.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/kivy/arm64-v8a__ndk_target_24/kivy/examples/widgets/sequenced_images/data/images/button_white_animated.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/kivy/arm64-v8a__ndk_target_24/kivy/examples/widgets/sequenced_images/data/images/bird.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Tools/peg_generator/data/xxl.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Lib/test/test_importlib/zipdata01/ziptestdata.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Lib/test/test_importlib/namespace_pkgs/missing_directory.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Lib/test/test_importlib/namespace_pkgs/top_level_portion1.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Lib/test/test_importlib/namespace_pkgs/nested_portion1.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Lib/test/test_importlib/zipdata02/ziptestdata.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Lib/test/zip_cp437_header.zip
+.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3/Lib/test/zipdir.zip
+
+[10] IMPORTANT RECIPE FILES
+.buildozer/android/platform/python-for-android/pythonforandroid/recipes/setuptools/__init__.py
+.buildozer/android/platform/python-for-android/pythonforandroid/recipes/cython/__init__.py
+.buildozer/android/platform/python-for-android/pythonforandroid/recipes/pyopenssl/__init__.py
+.buildozer/android/platform/python-for-android/pythonforandroid/recipes/python3/__init__.py
+.buildozer/android/platform/python-for-android/pythonforandroid/recipes/sdl2_image/__init__.py
+.buildozer/android/platform/python-for-android/pythonforandroid/recipes/hostpython3/__init__.py
+.buildozer/android/platform/python-for-android/pythonforandroid/recipes/libwebp/__init__.py
+.buildozer/android/platform/python-for-android/pythonforandroid/recipes/openssl/__init__.py
+.buildozer/android/platform/python-for-android/pythonforandroid/recipes/libffi/__init__.py
+
+[11] DISK
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdd       1007G  6.1G  950G   1% /
+/dev/sdd       1007G  6.1G  950G   1% /
+
+[12] MEMORY
+               total        used        free      shared  buff/cache   available
+Mem:           9.6Gi       358Mi       7.9Gi       3.0Mi       1.4Gi       9.1Gi
+Swap:          3.0Gi          0B       3.0Gi
+
+[13] CRITICAL ERROR SCAN
+buildozer.log not found
+
+==============================================
+              DIAG COMPLETE
+==============================================

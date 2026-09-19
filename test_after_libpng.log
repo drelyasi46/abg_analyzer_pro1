@@ -1,0 +1,7 @@
+[WARNING]: prerequisites.py is experimental and does not support all prerequisites yet.
+[WARNING]: Please report any issues to the python-for-android issue tracker.
+[WARNING]: prerequisites.py is experimental and does not support all prerequisites yet.
+[WARNING]: Please report any issues to the python-for-android issue tracker.
+[1m[INFO][0m:    Recipe kivy: version "2.2.1" requested
+[1m[INFO][0m:    Will compile for the following archs: arm64-v8a
+[1m[31m[ERROR][39m[0m:   Build failed: Android SDK dir was not specified, exiting.

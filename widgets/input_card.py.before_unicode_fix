@@ -1,0 +1,75 @@
+from kivymd.uix.card import MDCard
+from kivymd.uix.textfield import MDTextField
+from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.boxlayout import MDBoxLayout
+
+
+class InputCard(MDCard):
+
+    def __init__(self, analyze_callback=None, **kwargs):
+        super().__init__(
+            orientation="vertical",
+            padding="16dp",
+            spacing="10dp",
+            radius=[16, 16, 16, 16],
+            elevation=2,
+            **kwargs
+        )
+
+        self.analyze_callback = analyze_callback
+
+        self.fields = {}
+
+        layout = MDBoxLayout(
+            orientation="vertical",
+            spacing="10dp"
+        )
+
+        definitions = [
+            ("ph", "pH"),
+            ("pco2", "PaCO₂"),
+            ("hco3", "HCO3-"),
+            ("na", "Na⁺"),
+            ("cl", "Cl⁻"),
+        ]
+
+        for key, label in definitions:
+            field = MDTextField(
+                hint_text=label,
+                mode="rectangle",
+                size_hint_y=None,
+                height="52dp",
+                input_filter="float",
+            )
+            self.fields[key] = field
+            layout.add_widget(field)
+
+        button = MDRaisedButton(
+            text="ANALYZE ABG",
+            size_hint_y=None,
+            height="48dp",
+            pos_hint={"center_x": 0.5},
+        )
+
+        button.bind(on_release=self._analyze)
+
+        layout.add_widget(button)
+
+        self.add_widget(layout)
+
+    def _analyze(self, *args):
+        if self.analyze_callback:
+            self.analyze_callback(self.get_values())
+
+    def get_values(self):
+        values = {}
+
+        for key, field in self.fields.items():
+            text = field.text.strip()
+
+            if not text:
+                raise ValueError(f"Missing value: {key}")
+
+            values[key] = float(text)
+
+        return values

@@ -1,0 +1,7 @@
+[15:52:16] === ENVIRONMENT CHECK ===
+[15:52:16] python: /home/babak/ube/.venv/bin/python3
+[15:52:16] buildozer: /home/babak/.local/bin/buildozer
+[15:52:16] java: /usr/bin/java
+[15:52:16] VENV: /home/babak/ube/.venv/bin/python3
+[15:52:16] === CONFIGURING BUILD ENVIRONMENT ===
+[15:52:16] OPENSSL LOCAL: /home/babak/p4a-local/openssl

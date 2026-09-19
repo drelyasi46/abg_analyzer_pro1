@@ -1,0 +1,117 @@
+[01:20:31] ========================================
+[01:20:31]  ABG ANDROID BUILD ENGINE
+[01:20:31] ========================================
+[01:20:31] === ENVIRONMENT CHECK ===
+[01:20:31] python: /home/babak/abg_analyzer_pro/.venv_ui/bin/python3
+[01:20:31] buildozer: /home/babak/.local/bin/buildozer
+[01:20:31] java: /usr/bin/java
+[01:20:31] perl: /usr/bin/perl
+[01:20:31] P4A SOURCE: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+[01:20:31] LOCAL OPENSSL: /home/babak/p4a-local/openssl
+[01:20:31] === BUILD START ===
+[01:20:31] === CONFIGURING BUILD ENVIRONMENT ===
+[01:20:31] P4A_SOURCE_DIR: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+[01:20:31] PYTHONPATH: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+[01:20:31] P4A_openssl_DIR: /home/babak/p4a-local/openssl
+[01:20:31] P4A_OPENSSL_DIR: /home/babak/p4a-local/openssl
+[01:20:31] === OPENSSL CACHE PREPARATION ===
+[01:20:31] P4A PACKAGES PATH CREATED: /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/packages
+[01:20:31] SEEDING OPENSSL CACHE: /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/packages/openssl/openssl-1.1.1w.tar.gz
+[01:20:31] OPENSSL ARCHIVE: /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/packages/openssl/openssl-1.1.1w.tar.gz
+[01:20:31] OPENSSL MARKER: /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/packages/openssl/.mark-openssl-1.1.1w.tar.gz
+[01:20:31] OPENSSL CACHE: READY
+[01:20:31] === P4A PREFLIGHT ===
+[01:20:31] $ /home/babak/ube/.venv/bin/python3 -c 
+import os
+import sys
+
+print("PYTHON:", sys.executable)
+print("P4A_OPENSSL_DIR:", os.environ.get("P4A_OPENSSL_DIR"))
+print("P4A_SOURCE_DIR:", os.environ.get("P4A_SOURCE_DIR"))
+
+try:
+    import pythonforandroid
+    import pythonforandroid.recipe
+
+    print("P4A PACKAGE:", pythonforandroid.__file__)
+    print("P4A RECIPE:", pythonforandroid.recipe.__file__)
+
+except Exception as exc:
+    print("P4A IMPORT ERROR:", repr(exc))
+    sys.exit(2)
+
+PYTHON: /home/babak/ube/.venv/bin/python3
+P4A_OPENSSL_DIR: /home/babak/p4a-local/openssl
+P4A_SOURCE_DIR: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+P4A PACKAGE: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android/pythonforandroid/__init__.py
+P4A RECIPE: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android/pythonforandroid/recipe.py
+[01:20:32] P4A PREFLIGHT: OK
+[01:20:32] $ buildozer -v android debug
+# Ensure build layout
+# Check configuration tokens
+# Preparing build
+# Check requirements for android
+# Search for Git (git)
+#  -> found at /usr/bin/git
+# Search for Cython (cython)
+#  -> found at /home/babak/.local/bin/cython
+# Search for Java compiler (javac)
+#  -> found at /usr/bin/javac
+# Search for Java keytool (keytool)
+#  -> found at /usr/bin/keytool
+# Install platform
+# Run 'git config --get remote.origin.url' ...
+# Cwd /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+https://github.com/kivy/python-for-android.git
+# Run 'git branch -vv' ...
+# Cwd /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+* master 58d21141 [origin/master] Merge pull request #3321 from kivy/release-2026.05.09
+# Run '/usr/bin/python3 -m pip install -q appdirs colorama>=0.3.3 jinja2 sh>=2, <3.0; sys_platform!="win32" meson ninja build toml packaging setuptools wheel~=0.43.0' ...
+# Cwd None
+
+[notice] A new release of pip is available: 26.1.2 -> 26.2.1
+[notice] To update, run: /usr/bin/python3 -m pip install --upgrade pip
+# Apache ANT found at /home/babak/.buildozer/android/platform/apache-ant-1.9.4
+# Android SDK found at /home/babak/.buildozer/android/platform/android-sdk
+# Recommended android's NDK version by p4a is: 28c
+# Android NDK is missing, downloading
+# Downloading https://dl.google.com/android/repository/android-ndk-r28c-linux.zip
+Traceback (most recent call last):
+  File "/home/babak/.local/bin/buildozer", line 6, in <module>
+    sys.exit(main())
+  File "/home/babak/.local/lib/python3.10/site-packages/buildozer/scripts/client.py", line 16, in main
+    Buildozer().run_command(sys.argv[1:])
+  File "/home/babak/.local/lib/python3.10/site-packages/buildozer/__init__.py", line 684, in run_command
+    self.target.run_commands(args)
+  File "/home/babak/.local/lib/python3.10/site-packages/buildozer/target.py", line 96, in run_commands
+    func(args)
+  File "/home/babak/.local/lib/python3.10/site-packages/buildozer/targets/android.py", line 1015, in cmd_debug
+    super().cmd_debug(*args)
+  File "/home/babak/.local/lib/python3.10/site-packages/buildozer/target.py", line 106, in cmd_debug
+    self.buildozer.prepare_for_build()
+  File "/home/babak/.local/lib/python3.10/site-packages/buildozer/__init__.py", line 91, in prepare_for_build
+    self.target.install_platform()
+  File "/home/babak/.local/lib/python3.10/site-packages/buildozer/targets/android.py", line 655, in install_platform
+    self._install_android_ndk()
+  File "/home/babak/.local/lib/python3.10/site-packages/buildozer/targets/android.py", line 473, in _install_android_ndk
+    buildops.download(url,
+  File "/home/babak/.local/lib/python3.10/site-packages/buildozer/buildops.py", line 416, in download
+    with urlopen(request) as response:
+  File "/usr/lib/python3.10/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+  File "/usr/lib/python3.10/urllib/request.py", line 525, in open
+    response = meth(req, response)
+  File "/usr/lib/python3.10/urllib/request.py", line 634, in http_response
+    response = self.parent.error(
+  File "/usr/lib/python3.10/urllib/request.py", line 563, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python3.10/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.10/urllib/request.py", line 643, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 404: Not Found
+[01:20:38] BUILD FAILED: exit code 1
+[01:20:38] === DIAGNOSTICS ===
+[01:20:38] No known failure rule detected.
+[01:20:38] FAILURE RULES: 
+[01:20:38] NO AUTOMATIC REPAIR AVAILABLE

@@ -1,0 +1,65 @@
+============================================================
+        ABG ANALYZER PRO - BUILD DIAGNOSTIC ENGINE
+============================================================
+Time: Sat Aug 15 18:03:36 +0330 2026
+Project: /home/babak/abg_analyzer_pro
+
+===== 1. HOST PYTHON =====
+Python 3.10.12
+/usr/bin/python3
+
+===== 2. BUILDOZER =====
+Buildozer 1.6.0
+/home/babak/.local/bin/buildozer
+
+===== 3. CYTHON =====
+Cython version 0.29.37
+
+===== 4. BUILDOZER SPEC =====
+15:requirements = python3==3.12.10,kivy==2.2.1
+20:android.api = 34
+21:android.minapi = 24
+22:android.ndk = 27c
+23:android.archs = arm64-v8a
+24:android.enable_androidx = True
+
+===== 5. PYTHON-FOR-ANDROID =====
+P4A: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+57:    version = '3.14.2'
+186:        _p_version = Version(self.version)
+213:        _p_version = Version(self.version)
+329:        _p_version = Version(self.version)
+35:    version = "3.14.2"
+121:        p_version = Version(self.version)
+
+===== 6. PYTHON RECIPE CONSISTENCY =====
+python3 recipe : 3.14.2
+hostpython3    : 3.14.2
+requirements   : requirements = python3==3.12.10,kivy==2.2.1
+
+===== 7. STALE BUILD DIRECTORIES =====
+
+===== 8. RECENT LOG FILES =====
+1786804416.9252167220 /home/babak/abg_analyzer_pro/auto_diagnose_20260815_180336.log
+1786804168.4532217660 /home/babak/abg_analyzer_pro/auto_repair_20260815_175612.log
+1786803923.4612114560 /home/babak/abg_analyzer_pro/auto_repair_20260815_175521.log
+1786723987.1734959840 /home/babak/abg_analyzer_pro/test_after_png_local.log
+1786722467.6574931720 /home/babak/abg_analyzer_pro/test_after_jpeg_local3.log
+1786722225.5454959540 /home/babak/abg_analyzer_pro/test_after_jpeg_local.log
+1786722158.3614967940 /home/babak/abg_analyzer_pro/test_after_jpeg_dir.log
+1786722018.6694979600 /home/babak/abg_analyzer_pro/test_after_jpeg_marker.log
+1786721570.3374974080 /home/babak/abg_analyzer_pro/test_after_jpeg_cache.log
+1786720820.9534983220 /home/babak/abg_analyzer_pro/test_after_libpng2.log
+
+===== 9. ERROR SIGNATURE ANALYSIS =====
+Analyzing: /home/babak/abg_analyzer_pro/auto_diagnose_20260815_180336.log
+
+No known error signature detected.
+
+===== 10. CONSISTENCY CHECK =====
+PASS: python3 and hostpython3 recipe versions match.
+
+===== DIAGNOSTIC RESULT =====
+NO FILES WERE MODIFIED.
+Diagnostic log: auto_diagnose_20260815_180336.log
+============================================================

@@ -1,0 +1,101 @@
+[1/10] Creating safe backup...
+BACKUP: /home/babak/abg_analyzer_pro/buildozer.spec
+BACKUP: /home/babak/abg_analyzer_pro/main.py
+BACKUP: /home/babak/abg_analyzer_pro/auto_repair.sh
+Backup completed.
+
+[2/10] Recording configuration...
+
+=== buildozer.spec ===
+15:requirements = python3,kivy==2.2.1
+16:p4a.source_dir = /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+20:android.api = 34
+21:android.minapi = 24
+22:android.ndk = 27c
+23:android.archs = arm64-v8a
+
+=== Python ===
+Python 3.10.12
+
+=== Buildozer ===
+Buildozer 1.6.0
+
+=== Git ===
+git version 2.34.1
+
+=== NDK ===
+/home/babak/.buildozer/android/platform/android-ndk-r27c
+
+[3/10] Testing DNS...
+DNS: PASS
+140.82.121.3    github.com
+
+[4/10] Testing IPv4 connectivity...
+
+TEST: GitHub IPv4 HTTPS
+URL : https://github.com
+RESULT: PASS
+
+[5/10] Testing IPv6 connectivity...
+IPv6: FAIL (not necessarily a problem)
+
+[6/10] Testing GitHub Git access...
+
+TEST: GitHub JPEG repository
+GIT : https://github.com/libsdl-org/jpeg.git
+RESULT: FAIL
+
+[7/10] Testing Windows network from WSL...
+PowerShell detected.
+WINDOWS_GITHUB_443=PASS
+
+[8/10] Inspecting existing JPEG checkout/cache...
+JPEG checkout: NOT FOUND
+
+[9/10] Inspecting p4a/NDK configuration...
+p4a version = 2026.05.09
+p4a path    = /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android/pythonforandroid/__init__.py
+recommended = 28c
+minimum    = 25
+maximum    = 25
+API        = 24
+
+[10/10] Automatic Windows-assisted JPEG repair...
+Windows temporary directory: C:\Users\Emd\AppData\Local\Temp\
+Downloading SDL2 JPEG source through Windows...
+WINDOWS_JPEG_DOWNLOAD_START
+WINDOWS_JPEG_ARCHIVE=PASS
+WINDOWS_JPEG_EXTRACT=PASS
+WINDOWS_JPEG_DOWNLOAD=PASS
+Windows successfully downloaded JPEG.
+Checking known Windows extraction path...
+JPEG source located successfully:
+/mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL
+Found extracted JPEG source:
+/mnt/c/Users/Emd/AppData/Local/Temp/abg-jpeg-test/jpeg-9e-SDL
+LOCAL JPEG SOURCE INSTALL: PASS
+
+[11/11] Verifying local JPEG source...
+JPEG directory exists:
+/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2/jni/SDL2_image/external/jpeg
+JPEG source verification: PASS
+
+============================================================
+ WINDOWS-ASSISTED REPAIR RESULT
+============================================================
+JPEG dependency has been supplied locally.
+
+The next build can now retry SDL2_image without
+requiring WSL to clone github.com/libsdl-org/jpeg.git.
+
+IMPORTANT:
+No .buildozer directory was deleted.
+No ~/.buildozer directory was deleted.
+No NDK was changed.
+No Kivy version was changed.
+No python-for-android version was changed.
+
+[10/10] Automatic decision...
+GitHub HTTPS works, but Git clone failed.
+Likely Git-specific configuration/problem.
+No destructive repair performed.

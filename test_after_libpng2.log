@@ -1,0 +1,111 @@
+[WARNING]: prerequisites.py is experimental and does not support all prerequisites yet.
+[WARNING]: Please report any issues to the python-for-android issue tracker.
+[WARNING]: prerequisites.py is experimental and does not support all prerequisites yet.
+[WARNING]: Please report any issues to the python-for-android issue tracker.
+[1m[INFO][0m:    Recipe kivy: version "2.2.1" requested
+[1m[INFO][0m:    Will compile for the following archs: arm64-v8a
+[1m[INFO][0m:    Found Android API target in $ANDROIDAPI: 34
+[1m[INFO][0m:    Available Android APIs are (34)
+[1m[INFO][0m:    Requested API target 34 is available, continuing.
+[1m[INFO][0m:    Found NDK dir in $ANDROIDNDK: /home/babak/.buildozer/android/platform/android-ndk-r27c
+[1m[INFO][0m:    Found NDK version 27c
+[1m[31m[WARNING][39m[0m: Maximum recommended NDK version is 28c, but newer versions may work.
+[1m[31m[WARNING][39m[0m: Newer NDKs may not be fully supported by p4a.
+[1m[INFO][0m:    Getting NDK API version (i.e. minimum supported API) from user argument
+[1m[90m[DEBUG][39m[0m:   All possible dists: []
+[1m[90m[DEBUG][39m[0m:   Dist matching name and arch: []
+[1m[90m[DEBUG][39m[0m:   Dist matching ndk_api and recipe: []
+[1m[INFO][0m:    No existing dists meet the given requirements!
+[1m[90m[DEBUG][39m[0m:   Remove directory and subdirectory /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/dists/abganalyzer
+[1m[INFO][0m:    [1m[94mNo dist exists that meets your requirements, so one will be built.[0m
+[1m[INFO][0m:    Found a single valid recipe set: ['hostpython3', 'jpeg', 'libffi', 'libwebp', 'openssl', 'png', 'sdl2_image', 'sdl2_mixer', 'sdl2_ttf', 'six', 'sqlite3', 'python3', 'sdl2', 'libthorvg', 'pyjnius', 'setuptools', 'android', 'kivy']
+[1m[INFO][0m:    The selected bootstrap is sdl2
+[1m[INFO][0m:    [1m[32m# Creating dist with sdl2 bootstrap[0m[39m
+[1m[INFO][0m:    [1m[94mDist will have name abganalyzer and requirements (python3, kivy)[0m
+[1m[INFO][0m:    Dist contains the following requirements as recipes: ['hostpython3', 'jpeg', 'libffi', 'libwebp', 'openssl', 'png', 'sdl2_image', 'sdl2_mixer', 'sdl2_ttf', 'sqlite3', 'python3', 'sdl2', 'libthorvg', 'pyjnius', 'setuptools', 'android', 'kivy']
+[1m[INFO][0m:    Dist will also contain modules (chardet, filetype, six, urllib3, certifi, requests, idna) installed from pip
+[1m[INFO][0m:    Dist will be build in mode debug
+[1m[INFO][0m:    [36m-> directory context /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/bootstrap_builds/sdl2[39m
+[1m[INFO][0m:    [36m<- directory context /home/babak/abg_analyzer_pro[39m
+[1m[90m[DEBUG][39m[0m:   Create directory /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/dists/abganalyzer
+[1m[INFO][0m:    [1m[94mRecipe build order is ['hostpython3', 'jpeg', 'libffi', 'libwebp', 'openssl', 'png', 'sdl2_image', 'sdl2_mixer', 'sdl2_ttf', 'sqlite3', 'python3', 'sdl2', 'libthorvg', 'pyjnius', 'setuptools', 'android', 'kivy'][0m
+[1m[INFO][0m:    [1m[94mThe requirements (certifi, chardet, filetype, idna, requests, six, urllib3) were not found as recipes, they will be installed with pip.[0m
+[1m[INFO][0m:    [1m[32m# Downloading recipes [0m[39m
+[1m[INFO][0m:    [1m[32mDownloading hostpython3[0m[39m
+[1m[INFO][0m:    [36m-> directory context /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/packages/hostpython3[39m
+[1m[90m[DEBUG][39m[0m:   [90m->[0m running basename https://github.com/python/cpython/archive/refs/tags/v3.14.2.tar.gz[0m
+[1m[90m[DEBUG][39m[0m:   	v3.14.2.tar.gz
+[1m[INFO][0m:    hostpython3 download already cached, skipping
+[1m[INFO][0m:    [36m<- directory context /home/babak/abg_analyzer_pro[39m
+[1m[INFO][0m:    [1m[32mDownloading jpeg[0m[39m
+[1m[90m[DEBUG][39m[0m:   Create directory /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/packages/jpeg
+[1m[INFO][0m:    [36m-> directory context /home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/packages/jpeg[39m
+[1m[90m[DEBUG][39m[0m:   [90m->[0m running basename https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.1.tar.gz[0m
+[1m[90m[DEBUG][39m[0m:   	2.0.1.tar.gz
+[1m[90m[DEBUG][39m[0m:   Downloading jpeg from https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.1.tar.gz
+[1m[90m[DEBUG][39m[0m:   [90m->[0m running rm -f .mark-2.0.1.tar.gz[0m
+[1m[INFO][0m:    Downloading jpeg from https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.1.tar.gz
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/urllib/request.py", line 1348, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+  File "/usr/lib/python3.10/http/client.py", line 1312, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "/usr/lib/python3.10/http/client.py", line 1358, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "/usr/lib/python3.10/http/client.py", line 1307, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "/usr/lib/python3.10/http/client.py", line 1067, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.10/http/client.py", line 1005, in send
+    self.connect()
+  File "/usr/lib/python3.10/http/client.py", line 1477, in connect
+    super().connect()
+  File "/usr/lib/python3.10/http/client.py", line 971, in connect
+    self.sock = self._create_connection(
+  File "/usr/lib/python3.10/socket.py", line 845, in create_connection
+    raise err
+  File "/usr/lib/python3.10/socket.py", line 833, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/babak/ABG_BUILD/.buildozer/android/platform/python-for-android/pythonforandroid/toolchain.py", line 1267, in <module>
+    main()
+  File "/home/babak/ABG_BUILD/.buildozer/android/platform/python-for-android/pythonforandroid/entrypoints.py", line 18, in main
+    ToolchainCL()
+  File "/home/babak/ABG_BUILD/.buildozer/android/platform/python-for-android/pythonforandroid/toolchain.py", line 698, in __init__
+    getattr(self, command)(args)
+  File "/home/babak/ABG_BUILD/.buildozer/android/platform/python-for-android/pythonforandroid/toolchain.py", line 104, in wrapper_func
+    build_dist_from_args(ctx, dist, args)
+  File "/home/babak/ABG_BUILD/.buildozer/android/platform/python-for-android/pythonforandroid/toolchain.py", line 163, in build_dist_from_args
+    build_recipes(build_order, python_modules, ctx,
+  File "/home/babak/ABG_BUILD/.buildozer/android/platform/python-for-android/pythonforandroid/build.py", line 504, in build_recipes
+    recipe.download_if_necessary()
+  File "/home/babak/ABG_BUILD/.buildozer/android/platform/python-for-android/pythonforandroid/recipe.py", line 392, in download_if_necessary
+    self.download()
+  File "/home/babak/ABG_BUILD/.buildozer/android/platform/python-for-android/pythonforandroid/recipe.py", line 442, in download
+    self.download_file(self.versioned_url, filename)
+  File "/home/babak/ABG_BUILD/.buildozer/android/platform/python-for-android/pythonforandroid/recipe.py", line 243, in download_file
+    urlretrieve(url, target, report_hook)
+  File "/usr/lib/python3.10/urllib/request.py", line 241, in urlretrieve
+    with contextlib.closing(urlopen(url, data)) as fp:
+  File "/usr/lib/python3.10/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+  File "/usr/lib/python3.10/urllib/request.py", line 519, in open
+    response = self._open(req, data)
+  File "/usr/lib/python3.10/urllib/request.py", line 536, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+  File "/usr/lib/python3.10/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.10/urllib/request.py", line 1391, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+  File "/usr/lib/python3.10/urllib/request.py", line 1351, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno 110] Connection timed out>
+Download failed: <urlopen error [Errno 110] Connection timed out>; retrying in 1 second(s)...Download failed: <urlopen error [Errno 110] Connection timed out>; retrying in 2 second(s)...Download failed: <urlopen error [Errno 110] Connection timed out>; retrying in 4 second(s)...Download failed: <urlopen error [Errno 110] Connection timed out>; retrying in 8 second(s)...

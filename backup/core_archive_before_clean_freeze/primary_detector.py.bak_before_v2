@@ -1,0 +1,89 @@
+class PrimaryDisorderDetector:
+
+    @staticmethod
+    def detect(ph, pco2, hco3):
+
+        # -----------------------------------------
+        # Normal ABG
+        # -----------------------------------------
+        if (
+            7.35 <= ph <= 7.45
+            and 35 <= pco2 <= 45
+            and 22 <= hco3 <= 26
+        ):
+            return "Normal"
+
+        # -----------------------------------------
+        # Acidemia
+        # -----------------------------------------
+        if ph < 7.35:
+
+            # Both metabolic and respiratory abnormalities
+            if hco3 < 22 and pco2 > 45:
+
+                # In acidemia, decide which component is
+                # primarily responsible using direction/magnitude.
+                metabolic_change = 24 - hco3
+                respiratory_change = pco2 - 40
+
+                # If metabolic disturbance dominates
+                if metabolic_change >= respiratory_change / 1.5:
+                    return "Metabolic Acidosis"
+
+                return "Respiratory Acidosis"
+
+            if hco3 < 22:
+                return "Metabolic Acidosis"
+
+            if pco2 > 45:
+                return "Respiratory Acidosis"
+
+        # -----------------------------------------
+        # Alkalemia
+        # -----------------------------------------
+        elif ph > 7.45:
+
+            # Both metabolic and respiratory abnormalities
+            if hco3 > 26 and pco2 < 35:
+
+                metabolic_change = hco3 - 24
+                respiratory_change = 40 - pco2
+
+                if metabolic_change >= respiratory_change / 1.5:
+                    return "Metabolic Alkalosis"
+
+                return "Respiratory Alkalosis"
+
+            if hco3 > 26:
+                return "Metabolic Alkalosis"
+
+            if pco2 < 35:
+                return "Respiratory Alkalosis"
+
+        # -----------------------------------------
+        # Borderline / compensated disorders
+        # -----------------------------------------
+
+        # High PCO2 with elevated HCO3 strongly suggests
+        # respiratory acidosis rather than primary metabolic alkalosis.
+        if pco2 > 45 and hco3 > 26:
+            return "Respiratory Acidosis"
+
+        # Low PCO2 with reduced HCO3 strongly suggests
+        # respiratory alkalosis rather than primary metabolic acidosis.
+        if pco2 < 35 and hco3 < 22:
+            return "Respiratory Alkalosis"
+
+        if hco3 < 22:
+            return "Metabolic Acidosis"
+
+        if hco3 > 26:
+            return "Metabolic Alkalosis"
+
+        if pco2 > 45:
+            return "Respiratory Acidosis"
+
+        if pco2 < 35:
+            return "Respiratory Alkalosis"
+
+        return "Normal"

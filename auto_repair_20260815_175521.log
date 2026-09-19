@@ -1,0 +1,76 @@
+
+============================================================
+       ABG ANALYZER PRO - AUTO REPAIR SYSTEM
+============================================================
+Time: Sat Aug 15 17:55:21 +0330 2026
+Project: /home/babak/abg_analyzer_pro
+
+===== 1. SYSTEM =====
+Python:
+Python 3.10.12
+Buildozer:
+Buildozer 1.6.0
+Cython:
+Cython version 0.29.37
+
+===== 2. BUILD CONFIG =====
+15:requirements = python3==3.12.10,kivy==2.2.1
+20:android.api = 34
+21:android.minapi = 24
+22:android.ndk = 27c
+23:android.archs = arm64-v8a
+24:android.enable_androidx = True
+
+===== 3. P4A =====
+P4A found: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+python3 recipe:
+57:    version = '3.12.10'
+186:        _p_version = Version(self.version)
+213:        _p_version = Version(self.version)
+329:        _p_version = Version(self.version)
+hostpython3 recipe:
+35:    version = "3.12.10"
+121:        p_version = Version(self.version)
+
+===== 4. FORCE PYTHON 3.12.10 CONSISTENCY =====
+OK: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android/pythonforandroid/recipes/python3/__init__.py
+OK: /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android/pythonforandroid/recipes/hostpython3/__init__.py
+
+===== 5. VERIFY RECIPE VERSIONS =====
+python3:      version = '3.12.10'
+hostpython3:  version = "3.12.10"
+
+===== 6. BUILD SPEC =====
+OK: requirements = python3==3.12.10,kivy==2.2.1
+15:requirements = python3==3.12.10,kivy==2.2.1
+
+===== 7. REMOVE STALE DIST =====
+Removed old abganalyzer dist
+
+===== 8. REMOVE STALE HOSTPYTHON BUILD =====
+/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/packages/hostpython3
+/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3
+/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3
+
+Removing stale hostpython build/cache directories...
+/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/packages/hostpython3
+/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3
+/home/babak/abg_analyzer_pro/.buildozer/android/platform/build-arm64-v8a/build/other_builds/hostpython3/desktop/hostpython3
+
+===== 9. REMOVE TEMP PIP BUILD ENVIRONMENTS =====
+
+===== 10. CLEAR PIP BUILD CACHE =====
+Files removed: 285 (36.9 MB)
+Directories removed: 25
+
+===== 11. FINAL ENVIRONMENT =====
+System Python:
+Python 3.10.12
+
+Buildozer:
+Buildozer 1.6.0
+
+Cython:
+Cython version 0.29.37
+
+./auto_repair_build.sh: line 197: ANDROIDAPI: unbound variable

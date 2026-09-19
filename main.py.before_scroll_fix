@@ -1,0 +1,91 @@
+from kivymd.app import MDApp
+from kivymd.uix.screen import MDScreen
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.card import MDCard
+from kivymd.uix.label import MDLabel
+
+from core.abg_engine import ABGEngine
+from widgets.input_card import InputCard
+from widgets.result_card import ResultCard
+
+
+class ABGApp(MDApp):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.engine = ABGEngine()
+
+    def build(self):
+        self.title = "ABG Analyzer Pro"
+
+        self.theme_cls.theme_style = "Light"
+        self.theme_cls.primary_palette = "Blue"
+
+        screen = MDScreen()
+
+        layout = MDBoxLayout(
+            orientation="vertical",
+            padding="12dp",
+            spacing="12dp",
+        )
+
+        header = MDCard(
+            orientation="vertical",
+            padding="16dp",
+            spacing="4dp",
+            size_hint_y=None,
+            height="110dp",
+            radius=[16, 16, 16, 16],
+            elevation=2,
+        )
+
+        header.add_widget(
+            MDLabel(
+                text="ABG Analyzer Pro",
+                halign="center",
+                size_hint_y=None,
+                height="40dp",
+            )
+        )
+
+        header.add_widget(
+            MDLabel(
+                text="Arterial Blood Gas Analysis",
+                halign="center",
+                size_hint_y=None,
+                height="28dp",
+            )
+        )
+
+        self.input_card = InputCard(
+            size_hint_y=None,
+            height="430dp",
+        )
+        self.input_card.analyze_callback = self.analyze
+
+        self.result_card = ResultCard(
+            size_hint_y=None,
+            height="420dp",
+        )
+
+        layout.add_widget(header)
+        layout.add_widget(self.input_card)
+        layout.add_widget(self.result_card)
+
+        screen.add_widget(layout)
+
+        return screen
+
+    def analyze(self, values):
+        try:
+            report = self.engine.analyze(**values)
+            self.result_card.set_report(report)
+
+        except Exception as e:
+            self.result_card.set_report(
+                f"Unexpected Error:\n\n{type(e).__name__}: {e}"
+            )
+
+
+if __name__ == "__main__":
+    ABGApp().run()

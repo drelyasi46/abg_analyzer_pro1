@@ -1,0 +1,9 @@
+[16:09:55] === OPENSSL REPAIR ===
+[16:09:55] LOCAL OPENSSL SOURCE: /home/babak/p4a-local/openssl
+[16:09:55] P4A PACKAGES PATH: /home/babak/.buildozer/android/packages
+[16:09:55] OPENSSL PACKAGE DIR: /home/babak/.buildozer/android/packages/openssl
+[16:09:55] CREATING LOCAL OPENSSL ARCHIVE
+[16:10:04] LOCAL OPENSSL ARCHIVE CREATED: /home/babak/.buildozer/android/packages/openssl/openssl-1.1.1w.tar.gz (9997022 bytes)
+[16:10:04] OPENSSL CACHE MARKER: /home/babak/.buildozer/android/packages/openssl/.mark-openssl-1.1.1w.tar.gz
+[16:10:04] P4A_OPENSSL_DIR=/home/babak/p4a-local/openssl
+[16:10:04] OPENSSL REPAIR: CACHE SEEDED SUCCESSFULLY

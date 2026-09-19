@@ -1,0 +1,21 @@
+DATE=20260812_221819
+
+=== buildozer.spec ===
+15:requirements = python3,kivy==2.2.1
+16:p4a.source_dir = /home/babak/abg_analyzer_pro/.buildozer/android/platform/python-for-android
+20:android.api = 34
+21:android.minapi = 24
+22:android.ndk = 27c
+23:android.archs = arm64-v8a
+
+=== Python ===
+Python 3.10.12
+
+=== Buildozer ===
+Buildozer 1.6.0
+
+=== Git ===
+git version 2.34.1
+
+=== NDK directories ===
+/home/babak/.buildozer/android/platform/android-ndk-r27c

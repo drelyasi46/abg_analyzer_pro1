@@ -1,0 +1,766 @@
+#!/usr/bin/env bash
+
+set -u
+set -o pipefail
+
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SPEC="$PROJECT_DIR/buildozer.spec"
+
+LOG_DIR="$PROJECT_DIR/.apk_builder_logs"
+BACKUP_DIR="$PROJECT_DIR/.apk_builder_backups"
+
+TIMESTAMP="$(date '+%Y%m%d_%H%M%S')"
+
+MAIN_LOG="$LOG_DIR/build_$TIMESTAMP.log"
+REPORT="$LOG_DIR/report_$TIMESTAMP.txt"
+
+mkdir -p "$LOG_DIR" "$BACKUP_DIR"
+
+exec > >(tee -a "$MAIN_LOG") 2>&1
+
+
+section() {
+    echo
+    echo "============================================================"
+    echo "$1"
+    echo "============================================================"
+}
+
+ok() {
+    echo "[OK] $1"
+}
+
+warn() {
+    echo "[WARNING] $1"
+}
+
+error_msg() {
+    echo "[ERROR] $1"
+}
+
+
+# ============================================================
+# PROJECT VALIDATION
+# ============================================================
+
+section "PROJECT"
+
+if [[ ! -f "$SPEC" ]]; then
+    error_msg "buildozer.spec not found."
+    exit 1
+fi
+
+ok "buildozer.spec found."
+
+
+# ============================================================
+# BACKUP
+# ============================================================
+
+section "BACKUP"
+
+cp "$SPEC" "$BACKUP_DIR/buildozer.spec.$TIMESTAMP.bak"
+
+ok "buildozer.spec backup created."
+
+
+# ============================================================
+# ENVIRONMENT
+# ============================================================
+
+section "ENVIRONMENT"
+
+echo "Python:"
+python3 --version 2>&1 || true
+
+echo
+echo "Buildozer:"
+buildozer --version 2>&1 || true
+
+echo
+echo "Java:"
+java -version 2>&1 | head -n 3 || true
+
+echo
+echo "Architecture:"
+uname -m
+
+echo
+echo "ANDROIDSDK=${ANDROIDSDK:-NOT SET}"
+echo "ANDROIDNDK=${ANDROIDNDK:-NOT SET}"
+echo "ANDROIDAPI=${ANDROIDAPI:-NOT SET}"
+echo "ANDROIDMINAPI=${ANDROIDMINAPI:-NOT SET}"
+
+
+# ============================================================
+# BUILD CONFIGURATION
+# ============================================================
+
+section "BUILD CONFIGURATION"
+
+REQUIREMENTS="$(
+    grep -E '^[[:space:]]*requirements[[:space:]]*=' "$SPEC" |
+    head -n1 |
+    cut -d= -f2- |
+    xargs 2>/dev/null || true
+)"
+
+ANDROID_API="$(
+    grep -E '^[[:space:]]*android\.api[[:space:]]*=' "$SPEC" |
+    head -n1 |
+    cut -d= -f2- |
+    xargs 2>/dev/null || true
+)"
+
+ANDROID_NDK="$(
+    grep -E '^[[:space:]]*android\.ndk[[:space:]]*=' "$SPEC" |
+    head -n1 |
+    cut -d= -f2- |
+    xargs 2>/dev/null || true
+)"
+
+ANDROID_ARCHS="$(
+    grep -E '^[[:space:]]*android\.archs[[:space:]]*=' "$SPEC" |
+    head -n1 |
+    cut -d= -f2- |
+    xargs 2>/dev/null || true
+)"
+
+echo "requirements = ${REQUIREMENTS:-NOT SET}"
+echo "android.api = ${ANDROID_API:-NOT SET}"
+echo "android.ndk = ${ANDROID_NDK:-NOT SET}"
+echo "android.archs = ${ANDROID_ARCHS:-NOT SET}"
+
+
+# ============================================================
+# PATHS
+# ============================================================
+
+P4A_PLATFORM="$PROJECT_DIR/.buildozer/android/platform"
+
+if [[ -n "${ANDROID_ARCHS:-}" ]]; then
+    FIRST_ARCH="$(echo "$ANDROID_ARCHS" | cut -d',' -f1 | xargs)"
+else
+    FIRST_ARCH="arm64-v8a"
+fi
+
+BUILD_ROOT="$P4A_PLATFORM/build-$FIRST_ARCH"
+PACKAGES_DIR="$BUILD_ROOT/packages"
+
+mkdir -p "$PACKAGES_DIR"
+
+echo
+echo "Build root:"
+echo "$BUILD_ROOT"
+
+echo
+echo "Packages:"
+echo "$PACKAGES_DIR"
+
+
+# ============================================================
+# AUTOMATIC ERROR DETECTION
+# ============================================================
+
+detect_dependency_error() {
+
+    local logfile="$1"
+
+    echo
+    echo "Scanning build log for dependency failure..."
+
+    # --------------------------------------------------------
+    # libwebp
+    # --------------------------------------------------------
+
+    if grep -qiE \
+        'libwebp/Android\.mk|external/libwebp|libwebp.*No such file' \
+        "$logfile"
+    then
+        echo "DEPENDENCY=libwebp"
+        return 0
+    fi
+
+    # --------------------------------------------------------
+    # OpenSSL
+    # --------------------------------------------------------
+
+    if grep -qiE \
+        'openssl-1\.1\.1w|Downloading openssl|openssl.*403|openssl.*404' \
+        "$logfile"
+    then
+        echo "DEPENDENCY=openssl"
+        return 0
+    fi
+
+    # --------------------------------------------------------
+    # libffi
+    # --------------------------------------------------------
+
+    if grep -qiE \
+        'libffi.*No such file|Downloading libffi|libffi.*failed' \
+        "$logfile"
+    then
+        echo "DEPENDENCY=libffi"
+        return 0
+    fi
+
+    # --------------------------------------------------------
+    # libpng
+    # --------------------------------------------------------
+
+    if grep -qiE \
+        'libpng.*No such file|Downloading libpng|libpng.*failed' \
+        "$logfile"
+    then
+        echo "DEPENDENCY=libpng"
+        return 0
+    fi
+
+    # --------------------------------------------------------
+    # sqlite3
+    # --------------------------------------------------------
+
+    if grep -qiE \
+        'sqlite.*No such file|Downloading sqlite|sqlite.*failed' \
+        "$logfile"
+    then
+        echo "DEPENDENCY=sqlite3"
+        return 0
+    fi
+
+    # --------------------------------------------------------
+    # freetype
+    # --------------------------------------------------------
+
+    if grep -qiE \
+        'freetype.*No such file|Downloading freetype|freetype.*failed' \
+        "$logfile"
+    then
+        echo "DEPENDENCY=freetype"
+        return 0
+    fi
+
+    # --------------------------------------------------------
+    # generic HTTP dependency failure
+    # --------------------------------------------------------
+
+    if grep -qiE \
+        'HTTP Error 403|HTTP Error 404|403 Forbidden|404 Not Found' \
+        "$logfile"
+    then
+        echo "DEPENDENCY=http-download"
+        return 0
+    fi
+
+    echo "DEPENDENCY=unknown"
+    return 1
+}
+
+
+# ============================================================
+# LIBWEBP REPAIR
+# ============================================================
+
+repair_libwebp() {
+
+    section "AUTOMATIC LIBWEBP REPAIR"
+
+    local SDL2_ROOT="$BUILD_ROOT/build/bootstrap_builds/sdl2/jni/SDL2_image"
+    local LIBWEBP_DIR="$SDL2_ROOT/external/libwebp"
+    local LIBWEBP_RECIPE="$P4A_PLATFORM/python-for-android/pythonforandroid/recipes/libwebp"
+    local LIBWEBP_PACKAGE="$PACKAGES_DIR/libwebp"
+
+    echo "SDL2_image:"
+    echo "$SDL2_ROOT"
+
+    echo
+    echo "Expected libwebp:"
+    echo "$LIBWEBP_DIR"
+
+    echo
+    echo "python-for-android libwebp recipe:"
+    echo "$LIBWEBP_RECIPE"
+
+    if [[ ! -f "$LIBWEBP_RECIPE/__init__.py" ]]; then
+        error_msg "python-for-android libwebp recipe not found."
+        return 1
+    fi
+
+    echo
+    echo "Reading libwebp recipe..."
+
+    local WEBP_URL
+    WEBP_URL="$(
+        grep -E '^[[:space:]]*url[[:space:]]*=' \
+        "$LIBWEBP_RECIPE/__init__.py" |
+        head -n1 |
+        sed -E "s/.*=[[:space:]]*['\"]([^'\"]+)['\"].*/\1/" || true
+    )"
+
+    local WEBP_VERSION
+    WEBP_VERSION="$(
+        grep -E '^[[:space:]]*version[[:space:]]*=' \
+        "$LIBWEBP_RECIPE/__init__.py" |
+        head -n1 |
+        sed -E "s/.*=[[:space:]]*['\"]([^'\"]+)['\"].*/\1/" || true
+    )"
+
+    echo "Recipe version: ${WEBP_VERSION:-UNKNOWN}"
+    echo "Recipe URL: ${WEBP_URL:-UNKNOWN}"
+
+    echo
+    echo "Removing only incomplete SDL2_image libwebp tree..."
+
+    rm -rf "$LIBWEBP_DIR"
+
+    mkdir -p "$LIBWEBP_DIR"
+
+    echo
+    echo "Searching p4a cache for an existing libwebp archive..."
+
+    local ARCHIVE=""
+
+    if [[ -d "$LIBWEBP_PACKAGE" ]]; then
+        ARCHIVE="$(
+            find "$LIBWEBP_PACKAGE" \
+                -maxdepth 1 \
+                -type f \
+                \( -name '*.tar.gz' -o -name '*.tgz' -o -name '*.tar.xz' -o -name '*.zip' \) \
+                | head -n1
+        )"
+    fi
+
+    if [[ -n "$ARCHIVE" ]]; then
+        ok "Found cached libwebp archive:"
+        echo "$ARCHIVE"
+    else
+        warn "No libwebp archive found in p4a package cache."
+    fi
+
+    echo
+    echo "Re-running python-for-android dependency preparation..."
+
+    local P4A="$P4A_PLATFORM/python-for-android"
+
+    if [[ ! -f "$P4A/pythonforandroid/recipes/libwebp/__init__.py" ]]; then
+        error_msg "libwebp recipe unavailable."
+        return 1
+    fi
+
+    echo
+    echo "Cleaning only libwebp recipe build state..."
+
+    rm -rf "$BUILD_ROOT/build/other_builds/libwebp"* 2>/dev/null || true
+    rm -rf "$BUILD_ROOT/build/libs/libwebp"* 2>/dev/null || true
+
+    echo
+    echo "Forcing p4a to prepare libwebp through its own recipe..."
+
+    # Use the exact Android SDK/NDK environment already prepared by Buildozer.
+    local P4A_SDK="${ANDROIDSDK:-$P4A_PLATFORM/android-sdk}"
+    local P4A_NDK="${ANDROIDNDK:-$P4A_PLATFORM/android-ndk-r27c}"
+    local P4A_API="${ANDROIDAPI:-34}"
+    local P4A_MINAPI="${ANDROIDMINAPI:-24}"
+
+    echo
+    echo "Android SDK for p4a:"
+    echo "$P4A_SDK"
+
+    echo "Android NDK for p4a:"
+    echo "$P4A_NDK"
+
+    echo "Android API:"
+    echo "$P4A_API"
+
+    if [[ ! -d "$P4A_SDK" ]]; then
+        error_msg "Android SDK directory not found: $P4A_SDK"
+        return 1
+    fi
+
+    if [[ ! -d "$P4A_NDK" ]]; then
+        error_msg "Android NDK directory not found: $P4A_NDK"
+        return 1
+    fi
+
+    if (
+        cd "$PROJECT_DIR" &&
+        ANDROIDSDK="$P4A_SDK" \
+        ANDROIDNDK="$P4A_NDK" \
+        ANDROIDAPI="$P4A_API" \
+        ANDROIDMINAPI="$P4A_MINAPI" \
+        python3 -m pythonforandroid.toolchain create \
+            --dist_name=abganalyzer \
+            --bootstrap=sdl2 \
+            --requirements=python3==3.11.5,kivy==2.2.1 \
+            --arch=arm64-v8a \
+            --copy-libs \
+            --color=always \
+            --storage-dir="$BUILD_ROOT" \
+            --ndk-api="$P4A_MINAPI" \
+            --ignore-setup-py \
+            --debug
+    ); then
+
+        echo
+        echo "Checking repaired SDL2_image tree..."
+
+        if [[ -f "$LIBWEBP_DIR/Android.mk" ]]; then
+            ok "libwebp Android.mk restored successfully."
+            return 0
+        fi
+
+        warn "p4a completed but SDL2_image/libwebp Android.mk is still missing."
+    else
+        warn "p4a dependency preparation returned an error."
+    fi
+
+    echo
+    echo "Final automatic libwebp check:"
+
+    if [[ -f "$LIBWEBP_DIR/Android.mk" ]]; then
+        ok "libwebp Android.mk exists."
+        return 0
+    fi
+
+    error_msg "Automatic libwebp repair failed."
+    return 1
+}
+
+
+# ============================================================
+# OPENSSL REPAIR
+# ============================================================
+
+repair_openssl() {
+
+    section "AUTOMATIC OPENSSL REPAIR"
+
+    local target_dir="$PACKAGES_DIR/openssl"
+    local target="$target_dir/openssl-1.1.1w.tar.gz"
+    local marker="$target_dir/.mark-openssl-1.1.1w.tar.gz"
+
+    local sha256="cf3098950cb4d853ad95c0841f1f9c6d3dc102dccfcacd521d93925208b76ac8"
+
+    mkdir -p "$target_dir"
+
+    if [[ -f "$target" ]]; then
+
+        local current
+
+        current="$(
+            sha256sum "$target" |
+            awk '{print $1}'
+        )"
+
+        if [[ "$current" == "$sha256" ]]; then
+            ok "Valid OpenSSL 1.1.1w cache already exists."
+            touch "$marker"
+            return 0
+        fi
+
+        warn "Invalid OpenSSL archive found."
+        rm -f "$target" "$marker"
+    fi
+
+    local urls=(
+        "https://www.openssl-library.org/source/old/1.1.1/openssl-1.1.1w.tar.gz"
+        "https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz"
+    )
+
+    for url in "${urls[@]}"; do
+
+        echo
+        echo "Trying:"
+        echo "$url"
+
+        if curl \
+            -fL \
+            --retry 2 \
+            --retry-delay 2 \
+            --connect-timeout 15 \
+            --max-time 180 \
+            -o "$target" \
+            "$url"
+        then
+
+            current="$(
+                sha256sum "$target" |
+                awk '{print $1}'
+            )"
+
+            if [[ "$current" == "$sha256" ]]; then
+
+                touch "$marker"
+
+                ok "OpenSSL downloaded and verified."
+
+                return 0
+            fi
+
+            warn "Downloaded file has incorrect SHA-256."
+            rm -f "$target"
+        fi
+
+    done
+
+    warn "Automatic OpenSSL recovery failed."
+
+    return 1
+}
+
+
+# ============================================================
+# ERROR ANALYSIS
+# ============================================================
+
+analyze_error() {
+
+    local logfile="$1"
+
+    section "ERROR ANALYSIS"
+
+    if grep -qiE \
+        'timed out|connection timed out|Could not resolve host|network is unreachable' \
+        "$logfile"
+    then
+        warn "Network problem detected."
+    fi
+
+    if grep -qiE \
+        'ModuleNotFoundError: No module named .cgi|No module named cgi' \
+        "$logfile"
+    then
+        warn "Python cgi compatibility problem detected."
+    fi
+
+    if grep -qiE \
+        'LOAD segment.*aligned|16 KB|16KB|PAGE_SIZE' \
+        "$logfile"
+    then
+        warn "Android native library / 16 KB page-size issue detected."
+    fi
+
+    if grep -qiE \
+        'HTTP Error 403|HTTP Error 404|403 Forbidden|404 Not Found' \
+        "$logfile"
+    then
+        warn "HTTP dependency download failure detected."
+    fi
+
+    echo
+    echo "Relevant dependency lines:"
+    grep -Ei \
+        'Downloading .* from https?://|No such file or directory|HTTP Error|make: \*\*\*|Recipe .* failed' \
+        "$logfile" |
+    tail -n 30 ||
+        true
+}
+
+
+# ============================================================
+# BUILD
+# ============================================================
+
+run_build() {
+
+    local attempt="$1"
+    local logfile="$LOG_DIR/build_attempt_${attempt}.log"
+
+    echo
+    echo "Starting Buildozer attempt $attempt"
+    echo "Log:"
+    echo "$logfile"
+
+    buildozer android debug 2>&1 |
+        tee "$logfile"
+
+    return "${PIPESTATUS[0]}"
+}
+
+
+# ============================================================
+# BUILD LOOP
+# ============================================================
+
+MAX_ATTEMPTS=5
+BUILD_OK=0
+
+for ((attempt=1; attempt<=MAX_ATTEMPTS; attempt++)); do
+
+    section "BUILD ATTEMPT $attempt"
+
+    if run_build "$attempt"; then
+        BUILD_OK=1
+        break
+    fi
+
+    LOGFILE="$LOG_DIR/build_attempt_${attempt}.log"
+
+    analyze_error "$LOGFILE"
+
+    section "AUTOMATIC RECOVERY"
+
+    DEPENDENCY="$(detect_dependency_error "$LOGFILE" | tail -n1)"
+
+    echo
+    echo "Detected:"
+    echo "$DEPENDENCY"
+
+    case "$DEPENDENCY" in
+
+        DEPENDENCY=libwebp)
+
+            repair_libwebp
+            ;;
+
+        DEPENDENCY=openssl)
+
+            repair_openssl
+            ;;
+
+        DEPENDENCY=libffi)
+
+            warn "libffi detected."
+            echo "Removing corrupted libffi package cache."
+
+            rm -rf "$PACKAGES_DIR/libffi" 2>/dev/null || true
+            ;;
+
+        DEPENDENCY=libpng)
+
+            warn "libpng detected."
+            echo "Removing corrupted libpng package cache."
+
+            rm -rf "$PACKAGES_DIR/libpng" 2>/dev/null || true
+            ;;
+
+        DEPENDENCY=sqlite3)
+
+            warn "sqlite3 detected."
+            echo "Removing corrupted sqlite3 package cache."
+
+            rm -rf "$PACKAGES_DIR/sqlite3" 2>/dev/null || true
+            ;;
+
+        DEPENDENCY=freetype)
+
+            warn "freetype detected."
+            echo "Removing corrupted freetype package cache."
+
+            rm -rf "$PACKAGES_DIR/freetype" 2>/dev/null || true
+            ;;
+
+        DEPENDENCY=http-download)
+
+            warn "HTTP download failure detected."
+            echo "The next build attempt will retry the dependency."
+            ;;
+
+        DEPENDENCY=unknown)
+
+            warn "No known dependency identified."
+
+            echo
+            echo "Stopping automatic repair."
+            break
+            ;;
+
+    esac
+
+    echo
+    echo "Automatic recovery finished."
+    echo "The next build will determine whether the repair worked."
+
+done
+
+
+# ============================================================
+# APK DISCOVERY
+# ============================================================
+
+section "APK DISCOVERY"
+
+APK_LIST="$(
+    find "$PROJECT_DIR/bin" \
+        -type f \
+        \( -name '*.apk' -o -name '*.aab' \) \
+        2>/dev/null |
+    sort
+)"
+
+if [[ -n "$APK_LIST" ]]; then
+
+    ok "APK/AAB artifact found."
+
+    echo
+    echo "$APK_LIST"
+
+else
+
+    warn "No APK/AAB artifact found."
+fi
+
+
+# ============================================================
+# FINAL REPORT
+# ============================================================
+
+section "FINAL REPORT"
+
+{
+    echo "Universal APK Builder Report"
+    echo "============================"
+    echo
+    echo "Date: $(date)"
+    echo "Project: $PROJECT_DIR"
+    echo
+    echo "Requirements: $REQUIREMENTS"
+    echo "Android API: $ANDROID_API"
+    echo "Android NDK: $ANDROID_NDK"
+    echo "Architectures: $ANDROID_ARCHS"
+    echo
+    echo "Build success: $BUILD_OK"
+    echo
+    echo "Main log:"
+    echo "$MAIN_LOG"
+    echo
+    echo "Artifacts:"
+    echo "$APK_LIST"
+
+} > "$REPORT"
+
+
+echo
+echo "Report:"
+echo "$REPORT"
+
+echo
+echo "============================================================"
+
+if [[ "$BUILD_OK" -eq 1 ]]; then
+
+    echo "                    BUILD SUCCESS"
+    echo "============================================================"
+
+    echo
+    echo "APK/AAB:"
+    echo "$APK_LIST"
+
+    exit 0
+
+else
+
+    echo "                    BUILD FAILED"
+    echo "============================================================"
+
+    echo
+    echo "Automatic recovery could not complete the build."
+
+    echo
+    echo "Logs:"
+    echo "$LOG_DIR"
+
+    exit 2
+
+fi
