@@ -15,6 +15,8 @@ class InterpretationEngine:
         # Primary disorder
         # -----------------------------------------
         primary_messages = {
+            "Normal":
+                "No primary acid-base disorder is detected.",
             "Metabolic Acidosis":
                 "Primary metabolic acidosis.",
             "Metabolic Alkalosis":
@@ -26,7 +28,12 @@ class InterpretationEngine:
         }
 
         if primary_disorder in primary_messages:
-            report.append(primary_messages[primary_disorder])
+            if not (
+                primary_disorder == "Normal"
+                and anion_gap
+                and anion_gap["status"] == "HIGH_ANION_GAP"
+            ):
+                report.append(primary_messages[primary_disorder])
 
         # -----------------------------------------
         # Compensation / mixed respiratory component
