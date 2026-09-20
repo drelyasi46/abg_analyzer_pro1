@@ -12,81 +12,68 @@ class ReportComposer:
 
         report = []
 
-        report.append("=" * 50)
         report.append("ABG ANALYZER PRO")
-        report.append("=" * 50)
+        report.append("")
 
-        # Clinical Interpretation
         if interpretation:
-
-            report.append("")
             report.append("CLINICAL INTERPRETATION")
-            report.append("-" * 50)
+            report.append("")
 
             for item in interpretation.get("clinical_report", []):
-                report.append(f"• {item}")
+                report.append(str(item))
 
-        # Compensation
+            report.append("")
+
         if compensation:
-
-            report.append("")
             report.append("COMPENSATION")
-            report.append("-" * 50)
+            report.append("")
+            report.append(f"Expected: {compensation.expected}")
+            report.append(
+                f"Acceptable range: {compensation.low} - {compensation.high}"
+            )
+            report.append(f"Measured: {compensation.measured}")
+            report.append(f"Interpretation: {compensation.message}")
+            report.append("")
 
-            report.append(f"Expected : {compensation.expected}")
-            report.append(f"Acceptable Range : {compensation.low} - {compensation.high}")
-            report.append(f"Measured : {compensation.measured}")
-            report.append(f"Interpretation : {compensation.message}")
-
-        # Anion Gap
         if anion_gap:
-
-            report.append("")
             report.append("ANION GAP")
-            report.append("-" * 50)
+            report.append("")
+            report.append(
+                f"Anion gap: {anion_gap['anion_gap']} mEq/L"
+            )
+            report.append(str(anion_gap["message"]))
+            report.append("")
 
-            report.append(f"Anion Gap : {anion_gap['anion_gap']} mEq/L")
-            report.append(anion_gap["message"])
-
-        # Delta Ratio
         if delta_ratio:
-
-            report.append("")
             report.append("DELTA RATIO")
-            report.append("-" * 50)
-
-            report.append(f"Delta Ratio : {delta_ratio['delta_ratio']}")
-            report.append(delta_ratio["message"])
-
-        # Triple Disorder
-        if triple and triple.get("triple_disorder"):
-
             report.append("")
+            report.append(
+                f"Delta ratio: {delta_ratio['delta_ratio']}"
+            )
+            report.append(str(delta_ratio["message"]))
+            report.append("")
+
+        if triple and triple.get("triple_disorder"):
             report.append("TRIPLE DISORDER")
-            report.append("-" * 50)
+            report.append("")
 
             for item in triple["disorders"]:
-                report.append(f"• {item}")
-
-        # Severity
-        if severity:
+                report.append(str(item))
 
             report.append("")
-            report.append("SEVERITY")
-            report.append("-" * 50)
 
-            report.append(f"Severity : {severity['severity']}")
-            report.append(f"Score : {severity['score']}")
+        if severity:
+            report.append("SEVERITY")
+            report.append("")
+            report.append(f"Severity: {severity['severity']}")
+            report.append(f"Score: {severity['score']}")
 
             if severity.get("alerts"):
-
                 report.append("")
                 report.append("CLINICAL ALERTS")
+                report.append("")
 
                 for alert in severity["alerts"]:
-                    report.append(f"• {alert}")
+                    report.append(str(alert))
 
-        report.append("")
-        report.append("=" * 50)
-
-        return "\n".join(report)
+        return "\n".join(report).strip()

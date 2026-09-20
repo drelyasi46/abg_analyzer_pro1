@@ -2,6 +2,7 @@ class SeverityEngine:
 
     @staticmethod
     def evaluate(
+        primary_disorder=None,
         compensation=None,
         anion_gap=None,
         delta_ratio=None,
@@ -72,13 +73,27 @@ class SeverityEngine:
         if anion_gap:
 
             if anion_gap["status"] == "HIGH_ANION_GAP":
-                score += 1
-                alerts.append("High anion gap present.")
+
+                # High AG is clinically relevant when there is
+                # metabolic acidosis or a documented mixed HAGMA.
+                if primary_disorder == "Metabolic Acidosis":
+                    score += 1
+                    alerts.append("High anion gap present.")
+
+                elif delta_ratio and delta_ratio.get("status") in (
+                    "HAGMA_PLUS_NAGMA",
+                    "HAGMA_PLUS_METABOLIC_ALKALOSIS",
+                ):
+                    score += 1
+                    alerts.append("High anion gap present.")
 
         # Delta Ratio
         if delta_ratio:
 
-            if delta_ratio["status"] != "PURE_HAGMA":
+            if delta_ratio["status"] in (
+                "HAGMA_PLUS_NAGMA",
+                "HAGMA_PLUS_METABOLIC_ALKALOSIS",
+            ):
                 score += 1
 
         # Triple Disorder

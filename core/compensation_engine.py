@@ -14,26 +14,83 @@ class CompensationResult:
 class CompensationEngine:
 
     @staticmethod
+    def detect_chronicity(primary_disorder, pco2, hco3):
+        """
+        Estimate acute vs chronic respiratory disorder
+        from the expected renal compensation.
+
+        This is an ABG-based heuristic and should not override
+        clinical history.
+        """
+
+        normal_pco2 = 40
+        normal_hco3 = 24
+
+        if primary_disorder == "Respiratory Acidosis":
+
+            delta = pco2 - normal_pco2
+
+            if delta <= 0:
+                return False
+
+            acute_expected = normal_hco3 + (0.1 * delta)
+            chronic_expected = normal_hco3 + (0.4 * delta)
+
+        elif primary_disorder == "Respiratory Alkalosis":
+
+            delta = normal_pco2 - pco2
+
+            if delta <= 0:
+                return False
+
+            acute_expected = normal_hco3 - (0.2 * delta)
+            chronic_expected = normal_hco3 - (0.4 * delta)
+
+        else:
+            return False
+
+        acute_distance = abs(hco3 - acute_expected)
+        chronic_distance = abs(hco3 - chronic_expected)
+
+        return chronic_distance < acute_distance
+
+
+    @staticmethod
     def evaluate(primary_disorder, pco2, hco3, chronic=False):
 
         if primary_disorder == "Metabolic Acidosis":
-            return CompensationEngine._metabolic_acidosis(pco2, hco3)
+            return CompensationEngine._metabolic_acidosis(
+                pco2,
+                hco3
+            )
 
         elif primary_disorder == "Metabolic Alkalosis":
-            return CompensationEngine._metabolic_alkalosis(pco2, hco3)
+            return CompensationEngine._metabolic_alkalosis(
+                pco2,
+                hco3
+            )
 
         elif primary_disorder == "Respiratory Acidosis":
-            return CompensationEngine._respiratory_acidosis(pco2, hco3, chronic)
+            return CompensationEngine._respiratory_acidosis(
+                pco2,
+                hco3,
+                chronic
+            )
 
         elif primary_disorder == "Respiratory Alkalosis":
-            return CompensationEngine._respiratory_alkalosis(pco2, hco3, chronic)
+            return CompensationEngine._respiratory_alkalosis(
+                pco2,
+                hco3,
+                chronic
+            )
 
+        # Normal ABG has no compensation calculation.
         return None
+
 
     @staticmethod
     def _metabolic_acidosis(pco2, hco3):
 
-        # Winter Formula
         expected = (1.5 * hco3) + 8
 
         low = expected - 2
@@ -60,12 +117,10 @@ class CompensationEngine:
             message=message,
         )
 
-    
+
     @staticmethod
     def _metabolic_alkalosis(pco2, hco3):
 
-        # Expected respiratory compensation
-        # PCO2 = 0.7 × (HCO3 - 24) + 40 ± 5
         expected = (0.7 * (hco3 - 24)) + 40
 
         low = expected - 5
@@ -91,27 +146,21 @@ class CompensationEngine:
             status=status,
             message=message,
         )
+
+
     @staticmethod
     def _respiratory_alkalosis(pco2, hco3, chronic):
 
-        # Normal values
         normal_pco2 = 40
         normal_hco3 = 24
 
         delta_pco2 = normal_pco2 - pco2
 
         if chronic:
-            # Chronic respiratory alkalosis:
-            # HCO3 decreases ~4 mEq/L per 10 mmHg decrease in PCO2
             expected = normal_hco3 - (0.4 * delta_pco2)
-
             message_type = "Chronic"
-
         else:
-            # Acute respiratory alkalosis:
-            # HCO3 decreases ~2 mEq/L per 10 mmHg decrease in PCO2
             expected = normal_hco3 - (0.2 * delta_pco2)
-
             message_type = "Acute"
 
         low = expected - 2
@@ -137,27 +186,21 @@ class CompensationEngine:
             status=status,
             message=message,
         )
+
+
     @staticmethod
     def _respiratory_acidosis(pco2, hco3, chronic):
 
-        # Normal values
         normal_pco2 = 40
         normal_hco3 = 24
 
         delta_pco2 = pco2 - normal_pco2
 
         if chronic:
-            # Chronic respiratory acidosis:
-            # HCO3 rises ~4 mEq/L per 10 mmHg increase in PCO2
             expected = normal_hco3 + (0.4 * delta_pco2)
-
             message_type = "Chronic"
-
         else:
-            # Acute respiratory acidosis:
-            # HCO3 rises ~1 mEq/L per 10 mmHg increase in PCO2
             expected = normal_hco3 + (0.1 * delta_pco2)
-
             message_type = "Acute"
 
         low = expected - 2
@@ -183,22 +226,3 @@ class CompensationEngine:
             status=status,
             message=message,
         )
-
-    @staticmethod
-    def detect_chronicity(primary_disorder, pco2, hco3):
-
-        if primary_disorder == "Respiratory Acidosis":
-
-            acute_expected = 24 + ((pco2 - 40) / 10)
-            chronic_expected = 24 + (((pco2 - 40) / 10) * 4)
-
-            return abs(hco3 - chronic_expected) < abs(hco3 - acute_expected)
-
-        elif primary_disorder == "Respiratory Alkalosis":
-
-            acute_expected = 24 - (((40 - pco2) / 10) * 2)
-            chronic_expected = 24 - (((40 - pco2) / 10) * 4)
-
-            return abs(hco3 - chronic_expected) < abs(hco3 - acute_expected)
-
-        return False

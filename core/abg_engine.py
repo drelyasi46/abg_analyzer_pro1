@@ -75,16 +75,14 @@ class ABGEngine:
 
         # Triple Disorder
         triple = TripleDisorderEngine.analyze(
+            primary_disorder=primary_disorder,
             compensation_result=compensation,
-            delta_ratio=(
-                delta_ratio["delta_ratio"]
-                if delta_ratio
-                else None
-            )
+            delta_ratio=delta_ratio
         )
 
         # Interpretation
         interpretation = InterpretationEngine.generate(
+            primary_disorder=primary_disorder,
             compensation=compensation,
             anion_gap=anion_gap,
             delta_ratio=delta_ratio,
@@ -93,6 +91,7 @@ class ABGEngine:
 
         # Severity
         severity = SeverityEngine.evaluate(
+            primary_disorder=primary_disorder,
             compensation=compensation,
             anion_gap=anion_gap,
             delta_ratio=delta_ratio,

@@ -7,17 +7,11 @@ class AnionGapEngine:
 
         if ag > 12:
             status = "HIGH_ANION_GAP"
-
-            message = (
-                "High anion gap metabolic acidosis pattern."
-            )
+            message = "Elevated anion gap."
 
         else:
             status = "NORMAL_ANION_GAP"
-
-            message = (
-                "Normal anion gap metabolic acidosis pattern."
-            )
+            message = "Normal anion gap."
 
         return {
             "anion_gap": ag,
