@@ -87,7 +87,7 @@ class ABGApp(MDApp):
         scroll.add_widget(layout)
         screen.add_widget(scroll)
 
-        Clock.schedule_once(self._check_android_test_mode, 0)
+        # Clock.schedule_once(self._check_android_test_mode, 0)
         return screen
 
     def _check_android_test_mode(self, *args):
