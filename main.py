@@ -4,6 +4,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.scrollview import MDScrollView
 from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
+from kivy.clock import Clock
 
 from core.abg_engine import ABGEngine
 from widgets.input_card import InputCard
@@ -86,7 +87,25 @@ class ABGApp(MDApp):
         scroll.add_widget(layout)
         screen.add_widget(scroll)
 
+        Clock.schedule_once(self._check_android_test_mode, 0)
         return screen
+
+    def _check_android_test_mode(self, *args):
+        try:
+            from jnius import autoclass
+            PythonActivity = autoclass("org.kivy.android.PythonActivity")
+            intent = PythonActivity.mActivity.getIntent()
+            test_mode = intent.getStringExtra("ABG_AUTO_TEST")
+
+            if test_mode == "1":
+                from android_test_mode import run
+                count = run()
+                print(f"ANDROID_AUTO_TEST_RESULT: PASS ({count})")
+        except Exception as e:
+            print(
+                f"ANDROID_AUTO_TEST_RESULT: FAIL "
+                f"({type(e).__name__}: {e})"
+            )
 
     def analyze(self, values):
         try:
