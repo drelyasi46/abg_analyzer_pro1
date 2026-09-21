@@ -1,14 +1,22 @@
-from kivymd.app import MDApp
+﻿from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.scrollview import MDScrollView
 from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
 from kivy.clock import Clock
+from kivy.lang import Builder
+from pathlib import Path
 
 from core.abg_engine import ABGEngine
 from widgets.input_card import InputCard
 from widgets.result_card import ResultCard
+
+
+BASE_DIR = Path(__file__).resolve().parent
+
+Builder.load_file(str(BASE_DIR / "widgets" / "input_card.kv"))
+Builder.load_file(str(BASE_DIR / "widgets" / "result_card.kv"))
 
 
 class ABGApp(MDApp):
@@ -35,6 +43,7 @@ class ABGApp(MDApp):
             padding="12dp",
             spacing="12dp",
             size_hint_y=None,
+            size_hint_x=1,
         )
 
         layout.bind(minimum_height=layout.setter("height"))
@@ -71,7 +80,6 @@ class ABGApp(MDApp):
 
         self.input_card = InputCard(
             size_hint_y=None,
-            
         )
         self.input_card.analyze_callback = self.analyze
 
@@ -87,7 +95,6 @@ class ABGApp(MDApp):
         scroll.add_widget(layout)
         screen.add_widget(scroll)
 
-        # Clock.schedule_once(self._check_android_test_mode, 0)
         return screen
 
     def _check_android_test_mode(self, *args):
