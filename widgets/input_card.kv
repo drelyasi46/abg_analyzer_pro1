@@ -74,4 +74,4 @@
         MDRaisedButton:
             text: "Analyze ABG"
             pos_hint: {"center_x": 0.5}
-            on_release: app.analyze()
+            on_release: app.analyze(app.input_card.get_values())
