@@ -1,4 +1,4 @@
-﻿from kivymd.app import MDApp
+from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.scrollview import MDScrollView
@@ -118,14 +118,18 @@ class ABGApp(MDApp):
 
     def analyze(self, values):
         try:
+            if not any(v is not None for v in values.values()):
+                self.result_card.set_report(
+                    "Please enter at least one ABG value before analysis."
+                )
+                return
+
             report = self.engine.analyze(**values)
             self.result_card.set_report(report["report"])
-
         except Exception as e:
             self.result_card.set_report(
                 f"Unexpected Error:\n\n{type(e).__name__}: {e}"
             )
-
-
 if __name__ == "__main__":
     ABGApp().run()
+

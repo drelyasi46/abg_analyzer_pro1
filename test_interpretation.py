@@ -11,32 +11,29 @@ compensation = CompensationEngine.evaluate(
     hco3=10
 )
 
-
 ag = AnionGapEngine.calculate(
     na=140,
     cl=115,
     hco3=10
 )
 
-
 delta = DeltaRatioEngine.calculate(
     anion_gap=15,
     hco3=10
 )
 
-
 triple = TripleDisorderEngine.analyze(
-    compensation,
-    delta["delta_ratio"]
+    primary_disorder="Metabolic Acidosis",
+    compensation_result=compensation,
+    delta_ratio=delta
 )
-
 
 report = InterpretationEngine.generate(
-    compensation,
-    ag,
-    delta,
-    triple
+    primary_disorder="Metabolic Acidosis",
+    compensation=compensation,
+    anion_gap=ag,
+    delta_ratio=delta,
+    triple=triple
 )
-
 
 print(report)

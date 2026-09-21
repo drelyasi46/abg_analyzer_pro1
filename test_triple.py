@@ -3,7 +3,7 @@ from core.delta_ratio import DeltaRatioEngine
 from core.triple_disorder import TripleDisorderEngine
 
 
-# Sepsis + Diarrhea + Respiratory Alkalosis
+# Sepsis + diarrhea + respiratory alkalosis pattern
 
 compensation = CompensationEngine.evaluate(
     primary_disorder="Metabolic Acidosis",
@@ -11,17 +11,15 @@ compensation = CompensationEngine.evaluate(
     hco3=10
 )
 
-
 delta = DeltaRatioEngine.calculate(
     anion_gap=15,
     hco3=10
 )
 
-
 result = TripleDisorderEngine.analyze(
-    compensation,
-    delta["delta_ratio"]
+    primary_disorder="Metabolic Acidosis",
+    compensation_result=compensation,
+    delta_ratio=delta
 )
-
 
 print(result)

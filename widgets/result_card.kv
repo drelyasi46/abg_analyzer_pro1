@@ -1,34 +1,37 @@
 <ResultCard>:
     orientation: "vertical"
     size_hint_y: None
-    height: "450dp"
+    height: "520dp"
 
     MDCard:
         orientation: "vertical"
         padding: "12dp"
-        spacing: "10dp"
-        radius: [18]
-        elevation: 3
+        spacing: "8dp"
+        radius: [20, 20, 20, 20]
+        elevation: 5
+        size_hint_y: 1
 
         MDLabel:
             text: "ABG Report"
             halign: "center"
             bold: True
+            font_size: "20sp"
             size_hint_y: None
-            height: "35dp"
+            height: "38dp"
+
+        MDSeparator:
+            size_hint_y: None
+            height: "1dp"
 
         ScrollView:
             do_scroll_x: False
+            do_scroll_y: True
+            bar_width: "4dp"
 
-            Label:
-                id: report
-                text: "Ready for analysis..."
-                font_size: "16sp"
-                color: 0, 0, 0, 1
-
+            MDBoxLayout:
+                id: report_container
+                orientation: "vertical"
+                spacing: "10dp"
+                padding: "4dp"
                 size_hint_y: None
-                text_size: self.width, None
-                height: self.texture_size[1]
-
-                halign: "left"
-                valign: "top"
+                height: self.minimum_height

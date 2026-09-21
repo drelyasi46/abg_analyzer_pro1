@@ -11,12 +11,9 @@ class InterpretationEngine:
 
         report = []
 
-        # -----------------------------------------
-        # Primary disorder
-        # -----------------------------------------
         primary_messages = {
             "Normal":
-                "No primary acid-base disorder is detected.",
+                "No primary acid-base disorder detected.",
             "Metabolic Acidosis":
                 "Primary metabolic acidosis.",
             "Metabolic Alkalosis":
@@ -27,96 +24,114 @@ class InterpretationEngine:
                 "Primary respiratory alkalosis.",
         }
 
-        if primary_disorder in primary_messages:
-            if not (
-                primary_disorder == "Normal"
-                and anion_gap
-                and anion_gap["status"] == "HIGH_ANION_GAP"
-            ):
-                report.append(primary_messages[primary_disorder])
+        primary_message = primary_messages.get(primary_disorder)
 
-        # -----------------------------------------
-        # Compensation / mixed respiratory component
-        # -----------------------------------------
+        if primary_message:
+            report.append(primary_message)
+
+        # --------------------------------------------------
+        # Mixed / Triple disorder
+        # --------------------------------------------------
+
+        if triple:
+
+            if triple.get("triple_disorder"):
+                report.append(
+                    "A triple acid-base disorder is detected."
+                )
+
+            elif triple.get("mixed_disorder"):
+                report.append(
+                    "A mixed acid-base disorder is detected."
+                )
+
+        # --------------------------------------------------
+        # Compensation
+        # --------------------------------------------------
+
         if compensation:
 
-            if compensation.status == "APPROPRIATE":
-                report.append(compensation.message)
+            status = compensation.status
 
-            elif compensation.status == "SUPERIMPOSED_RESP_ACIDOSIS":
+            if status == "APPROPRIATE":
                 report.append(
-                    "Concurrent respiratory acidosis detected."
+                    "Compensation is appropriate for the primary disorder."
                 )
 
-            elif compensation.status == "SUPERIMPOSED_RESP_ALKALOSIS":
+            elif status == "SUPERIMPOSED_RESP_ACIDOSIS":
                 report.append(
-                    "Concurrent respiratory alkalosis detected."
+                    "Additional respiratory acidosis is present."
                 )
 
-            elif compensation.status == "SUPERIMPOSED_METABOLIC_ACIDOSIS":
+            elif status == "SUPERIMPOSED_RESP_ALKALOSIS":
                 report.append(
-                    "Concurrent metabolic acidosis detected."
+                    "Additional respiratory alkalosis is present."
                 )
 
-            elif compensation.status == "SUPERIMPOSED_METABOLIC_ALKALOSIS":
+            elif status == "SUPERIMPOSED_METABOLIC_ACIDOSIS":
                 report.append(
-                    "Concurrent metabolic alkalosis detected."
+                    "Additional metabolic acidosis is present."
                 )
 
-        # -----------------------------------------
+            elif status == "SUPERIMPOSED_METABOLIC_ALKALOSIS":
+                report.append(
+                    "Additional metabolic alkalosis is present."
+                )
+
+        # --------------------------------------------------
         # Anion Gap
-        # -----------------------------------------
+        # --------------------------------------------------
+
         if anion_gap:
 
-            if anion_gap["status"] == "HIGH_ANION_GAP":
+            status = anion_gap.get("status")
 
-                if primary_disorder == "Metabolic Acidosis":
-                    report.append(
-                        "High anion gap metabolic acidosis (HAGMA)."
-                    )
+            if (
+                status == "HIGH_ANION_GAP"
+                and primary_disorder == "Metabolic Acidosis"
+            ):
+                report.append(
+                    "High anion gap metabolic acidosis (HAGMA)."
+                )
 
-                elif primary_disorder == "Normal":
-                    report.append(
-                        "Elevated anion gap without metabolic acidosis."
-                    )
+            elif (
+                status == "NORMAL_ANION_GAP"
+                and primary_disorder == "Metabolic Acidosis"
+            ):
+                report.append(
+                    "Normal anion gap metabolic acidosis (NAGMA)."
+                )
 
-            elif anion_gap["status"] == "NORMAL_ANION_GAP":
+            elif (
+                status == "HIGH_ANION_GAP"
+                and primary_disorder == "Normal"
+            ):
+                report.append(
+                    "Elevated anion gap without a primary metabolic acidosis."
+                )
 
-                if primary_disorder == "Metabolic Acidosis":
-                    report.append(
-                        "Normal anion gap metabolic acidosis (NAGMA)."
-                    )
-
-        # -----------------------------------------
+        # --------------------------------------------------
         # Delta Ratio
-        # -----------------------------------------
+        # --------------------------------------------------
+
         if delta_ratio:
 
             status = delta_ratio.get("status")
 
             if status == "PURE_HAGMA":
                 report.append(
-                    "Pure high anion gap metabolic acidosis."
+                    "Delta ratio is consistent with predominantly HAGMA."
                 )
 
             elif status == "HAGMA_PLUS_METABOLIC_ALKALOSIS":
                 report.append(
-                    "Mixed HAGMA + metabolic alkalosis."
+                    "Additional metabolic alkalosis is suggested."
                 )
 
             elif status == "HAGMA_PLUS_NAGMA":
                 report.append(
-                    "Mixed HAGMA + normal anion gap metabolic acidosis."
+                    "Additional normal anion gap metabolic acidosis is suggested."
                 )
-
-        # -----------------------------------------
-        # Triple disorder
-        # -----------------------------------------
-        if triple and triple.get("triple_disorder"):
-
-            report.append(
-                "Triple acid-base disorder detected."
-            )
 
         return {
             "clinical_report": report

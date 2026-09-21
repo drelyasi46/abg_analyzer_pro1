@@ -5,12 +5,13 @@ from core.triple_disorder import TripleDisorderEngine
 from core.delta_ratio import DeltaRatioEngine
 
 
+primary_disorder = "Metabolic Acidosis"
+
 compensation = CompensationEngine.evaluate(
-    primary_disorder="Metabolic Acidosis",
+    primary_disorder=primary_disorder,
     pco2=45,
     hco3=8
 )
-
 
 ag = AnionGapEngine.calculate(
     na=140,
@@ -18,27 +19,26 @@ ag = AnionGapEngine.calculate(
     hco3=8
 )
 
-
 delta = DeltaRatioEngine.calculate(
-    anion_gap=32,
+    anion_gap=ag["anion_gap"],
     hco3=8
 )
 
-
 triple = TripleDisorderEngine.analyze(
-    compensation,
-    delta["delta_ratio"]
+    primary_disorder=primary_disorder,
+    compensation_result=compensation,
+    delta_ratio=delta
 )
-
 
 severity = SeverityEngine.evaluate(
-    compensation,
-    ag,
-    delta,
-    triple,
+    primary_disorder=primary_disorder,
+    compensation=compensation,
+    anion_gap=ag,
+    delta_ratio=delta,
+    triple=triple,
     hco3=8,
-    pco2=45
+    pco2=45,
+    ph=7.10
 )
-
 
 print(severity)

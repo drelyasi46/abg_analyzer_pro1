@@ -1,77 +1,211 @@
-<InputCard>
+<NumberStepper>:
+
+    orientation: "horizontal"
+    size_hint_y: None
+    height: "68dp"
+    spacing: "8dp"
+    padding: "2dp", "4dp"
+
+    MDLabel:
+        text: root.label
+        size_hint_x: 0.27
+        halign: "left"
+        valign: "middle"
+        text_size: self.size
+        bold: True
+        font_size: "15sp"
+        theme_text_color: "Primary"
+
+    MDRaisedButton:
+        text: "-"
+        size_hint_x: None
+        width: "52dp"
+        height: "52dp"
+        font_size: "27sp"
+        elevation: 5
+        md_bg_color: 0.90, 0.32, 0.30, 1
+        on_release: root.decrease()
+
+    MDCard:
+        size_hint_x: 0.30
+        size_hint_y: None
+        height: "52dp"
+        radius: [14, 14, 14, 14]
+        elevation: 4
+        md_bg_color: 0.96, 0.98, 1, 1
+
+        MDLabel:
+            text: str(round(root.value, 2)) if root.has_value else "—"
+            halign: "center"
+            valign: "middle"
+            text_size: self.size
+            font_size: "18sp"
+            bold: True
+            theme_text_color: "Primary"
+
+    MDRaisedButton:
+        text: "+"
+        size_hint_x: None
+        width: "52dp"
+        height: "52dp"
+        font_size: "27sp"
+        elevation: 5
+        md_bg_color: 0.12, 0.46, 0.82, 1
+        on_release: root.increase()
+
+
+<InputCard>:
 
     orientation: "vertical"
     adaptive_height: True
+    spacing: "10dp"
+    padding: "2dp", "2dp"
 
     MDCard:
-        elevation: 3
-        radius: [18, 18, 18, 18]
-        padding: "16dp"
         orientation: "vertical"
+        padding: "14dp"
+        spacing: "5dp"
+        radius: [22, 22, 22, 22]
+        elevation: 5
+        md_bg_color: 0.98, 0.99, 1, 1
         adaptive_height: True
-        spacing: "12dp"
 
         MDLabel:
-            text: "Patient Parameters"
+            text: "ABG PARAMETERS"
             halign: "center"
             bold: True
-            font_style: "Body1"
+            font_size: "19sp"
+            size_hint_y: None
+            height: "34dp"
+            theme_text_color: "Primary"
 
-        MDTextField:
-            id: ph
-            hint_text: "pH"
-            helper_text: "Normal: 7.35 - 7.45"
-            helper_text_mode: "on_focus"
-            input_filter: "float"
-
-        MDTextField:
-            id: pco2
-            hint_text: "PaCO2 (mmHg)"
-            helper_text: "Normal: 35 - 45"
-            helper_text_mode: "on_focus"
-            input_filter: "float"
-
-        MDTextField:
-            id: hco3
-            hint_text: "HCO3 (mEq/L)"
-            helper_text: "Normal: 22 - 26"
-            helper_text_mode: "on_focus"
-            input_filter: "float"
+        MDLabel:
+            text: "− = Fine Adjustment     + = Fast Adjustment"
+            halign: "center"
+            font_size: "11sp"
+            theme_text_color: "Secondary"
+            size_hint_y: None
+            height: "22dp"
 
         MDSeparator:
+            height: "1dp"
+
+        NumberStepper:
+            id: ph
+            label: "pH"
+            increment_step: 0.05
+            decrement_step: 0.01
+            start_value: 7.10
+            min_value: 6.80
+            max_value: 8.00
+
+        NumberStepper:
+            id: pco2
+            label: "PaCO2"
+            increment_step: 5
+            decrement_step: 1
+            start_value: 25
+            min_value: 10
+            max_value: 120
+
+        NumberStepper:
+            id: hco3
+            label: "HCO3-"
+            increment_step: 5
+            decrement_step: 1
+            start_value: 10
+            min_value: 5
+            max_value: 60
+
+        MDSeparator:
+            height: "1dp"
 
         MDLabel:
-            text: "Optional Laboratory Values"
+            text: "OPTIONAL LABORATORY VALUES"
             halign: "center"
             bold: True
-            font_style: "Body1"
+            font_size: "14sp"
+            size_hint_y: None
+            height: "30dp"
+            theme_text_color: "Secondary"
 
-        MDTextField:
+        NumberStepper:
             id: na
-            hint_text: "Na+"
-            input_filter: "float"
+            label: "Na+"
+            increment_step: 5
+            decrement_step: 1
+            start_value: 130
+            min_value: 80
+            max_value: 180
 
-        MDTextField:
+        NumberStepper:
             id: k
-            hint_text: "K+"
-            input_filter: "float"
+            label: "K+"
+            increment_step: 0.5
+            decrement_step: 0.1
+            start_value: 3.0
+            min_value: 1
+            max_value: 10
 
-        MDTextField:
+        NumberStepper:
             id: cl
-            hint_text: "Cl-"
-            input_filter: "float"
+            label: "Cl-"
+            increment_step: 5
+            decrement_step: 1
+            start_value: 90
+            min_value: 50
+            max_value: 150
 
-        MDTextField:
+        NumberStepper:
             id: albumin
-            hint_text: "Albumin (g/dL)"
-            input_filter: "float"
+            label: "Albumin"
+            increment_step: 0.5
+            decrement_step: 0.1
+            start_value: 2.5
+            min_value: 0.5
+            max_value: 8
 
-        MDTextField:
+        NumberStepper:
             id: lactate
-            hint_text: "Lactate (mmol/L)"
-            input_filter: "float"
+            label: "Lactate"
+            increment_step: 0.5
+            decrement_step: 0.1
+            start_value: 0.5
+            min_value: 0.1
+            max_value: 20
 
-        MDRaisedButton:
-            text: "Analyze ABG"
-            pos_hint: {"center_x": 0.5}
-            on_release: app.analyze(app.input_card.get_values())
+        MDBoxLayout:
+            size_hint_y: None
+            height: "58dp"
+            spacing: "10dp"
+            padding: "2dp", "6dp"
+
+            MDRaisedButton:
+                text: "ANALYZE ABG"
+                size_hint_x: 0.68
+                font_size: "14sp"
+                elevation: 5
+                on_release: app.analyze(app.input_card.get_values())
+
+            MDFlatButton:
+                text: "CLEAR"
+                size_hint_x: 0.32
+                font_size: "13sp"
+                on_release:
+                    app.input_card.clear_all()
+                    app.result_card.clear()
+
+        MDSeparator:
+            height: "1dp"
+
+        MDLabel:
+            text: "Designed & Developed by Dr. Babak Elyasi"
+            halign: "center"
+            valign: "middle"
+            text_size: self.size
+            size_hint_y: None
+            height: "32dp"
+            font_size: "16sp"
+            bold: True
+            theme_text_color: "Custom"
+            text_color: 0.20, 0.05, 0.30, 1

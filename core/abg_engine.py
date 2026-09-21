@@ -23,14 +23,12 @@ class ABGEngine:
         lactate=None,
     ):
 
-        # Primary Disorder
         primary_disorder = PrimaryDisorderDetector.detect(
             ph,
             pco2,
             hco3
         )
 
-        # Auto Detect Acute / Chronic
         if primary_disorder in (
             "Respiratory Acidosis",
             "Respiratory Alkalosis",
@@ -41,7 +39,6 @@ class ABGEngine:
                 hco3
             )
 
-        # Compensation
         compensation = CompensationEngine.evaluate(
             primary_disorder=primary_disorder,
             pco2=pco2,
@@ -49,38 +46,28 @@ class ABGEngine:
             chronic=chronic
         )
 
-        # Anion Gap
         anion_gap = None
 
         if na is not None and cl is not None:
+            anion_gap = AnionGapEngine.calculate(na, cl, hco3, albumin)
 
-            anion_gap = AnionGapEngine.calculate(
-                na,
-                cl,
-                hco3
-            )
-
-        # Delta Ratio
         delta_ratio = None
 
         if (
             anion_gap is not None
             and anion_gap["status"] == "HIGH_ANION_GAP"
         ):
-
             delta_ratio = DeltaRatioEngine.calculate(
                 anion_gap["anion_gap"],
                 hco3
             )
 
-        # Triple Disorder
         triple = TripleDisorderEngine.analyze(
             primary_disorder=primary_disorder,
             compensation_result=compensation,
             delta_ratio=delta_ratio
         )
 
-        # Interpretation
         interpretation = InterpretationEngine.generate(
             primary_disorder=primary_disorder,
             compensation=compensation,
@@ -89,7 +76,6 @@ class ABGEngine:
             triple=triple
         )
 
-        # Severity
         severity = SeverityEngine.evaluate(
             primary_disorder=primary_disorder,
             compensation=compensation,
@@ -101,14 +87,14 @@ class ABGEngine:
             ph=ph
         )
 
-        # Report
         report = ReportComposer.compose(
             interpretation=interpretation,
             severity=severity,
             compensation=compensation,
             anion_gap=anion_gap,
             delta_ratio=delta_ratio,
-            triple=triple
+            triple=triple,
+            primary_disorder=primary_disorder
         )
 
         return {

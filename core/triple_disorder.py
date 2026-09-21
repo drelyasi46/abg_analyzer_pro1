@@ -27,52 +27,57 @@ class TripleDisorderEngine:
 
         if compensation_result:
 
-            if compensation_result.status == "SUPERIMPOSED_RESP_ACIDOSIS":
+            status = compensation_result.status
+
+            if status == "SUPERIMPOSED_RESP_ACIDOSIS":
 
                 if "Respiratory Acidosis" not in disorders:
                     disorders.append("Respiratory Acidosis")
 
-            elif compensation_result.status == "SUPERIMPOSED_RESP_ALKALOSIS":
+            elif status == "SUPERIMPOSED_RESP_ALKALOSIS":
 
                 if "Respiratory Alkalosis" not in disorders:
                     disorders.append("Respiratory Alkalosis")
 
-            elif compensation_result.status == "SUPERIMPOSED_METABOLIC_ACIDOSIS":
+            elif status == "SUPERIMPOSED_METABOLIC_ACIDOSIS":
 
                 if "Metabolic Acidosis" not in disorders:
                     disorders.append("Metabolic Acidosis")
 
-            elif compensation_result.status == "SUPERIMPOSED_METABOLIC_ALKALOSIS":
+            elif status == "SUPERIMPOSED_METABOLIC_ALKALOSIS":
 
                 if "Metabolic Alkalosis" not in disorders:
                     disorders.append("Metabolic Alkalosis")
 
         # --------------------------------------------------
-        # Additional metabolic component from Delta Ratio
+        # Additional metabolic components from Delta Ratio
         # --------------------------------------------------
 
         if delta_ratio:
 
             status = delta_ratio.get("status")
 
-            # HAGMA + NAGMA
-            #
-            # The primary metabolic acidosis already represents
-            # the HAGMA component. Add the additional NAGMA.
+            # Pure HAGMA itself represents a metabolic acidosis
+            if status == "PURE_HAGMA":
 
-            if status == "HAGMA_PLUS_NAGMA":
+                if "Metabolic Acidosis" not in disorders:
+                    disorders.append("Metabolic Acidosis")
 
-                if "Additional Normal Anion Gap Metabolic Acidosis" not in disorders:
+            # HAGMA + additional normal anion gap metabolic acidosis
+            elif status == "HAGMA_PLUS_NAGMA":
+
+                if "Metabolic Acidosis" not in disorders:
+                    disorders.append("Metabolic Acidosis")
+
+                if (
+                    "Additional Normal Anion Gap Metabolic Acidosis"
+                    not in disorders
+                ):
                     disorders.append(
                         "Additional Normal Anion Gap Metabolic Acidosis"
                     )
 
             # HAGMA + metabolic alkalosis
-            #
-            # HAGMA represents an additional metabolic acidosis
-            # when the primary disorder is not already metabolic
-            # acidosis.
-
             elif status == "HAGMA_PLUS_METABOLIC_ALKALOSIS":
 
                 if "Metabolic Acidosis" not in disorders:
@@ -82,19 +87,36 @@ class TripleDisorderEngine:
                     disorders.append("Metabolic Alkalosis")
 
         # --------------------------------------------------
-        # Triple disorder
+        # Determine mixed / triple status
         # --------------------------------------------------
 
-        if len(disorders) >= 3:
+        # Count physiologically distinct acid-base components.
+        #
+        # "Additional Normal Anion Gap Metabolic Acidosis"
+        # is already an additional metabolic-acidosis component
+        # and therefore counts as a separate process.
+        component_count = len(disorders)
 
-            return {
-                "triple_disorder": True,
-                "disorders": disorders,
-                "message": "Triple acid-base disorder detected."
-            }
+        mixed_disorder = component_count >= 2
+        triple_disorder = component_count >= 3
+
+        # --------------------------------------------------
+        # Messages
+        # --------------------------------------------------
+
+        if triple_disorder:
+            message = "Triple acid-base disorder detected."
+
+        elif mixed_disorder:
+            message = "Mixed acid-base disorder detected."
+
+        else:
+            message = "No mixed acid-base disorder detected."
 
         return {
-            "triple_disorder": False,
+            "mixed_disorder": mixed_disorder,
+            "triple_disorder": triple_disorder,
             "disorders": disorders,
-            "message": "No triple disorder detected."
+            "component_count": component_count,
+            "message": message,
         }

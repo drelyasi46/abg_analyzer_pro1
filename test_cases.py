@@ -436,7 +436,7 @@ cases = [
             "hco3": 36,
             "na": 140,
             "k": 4.2,
-            "cl": 95,
+            "cl": 86,
             "albumin": 4,
             "lactate": 3,
         },

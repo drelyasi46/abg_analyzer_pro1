@@ -1,27 +1,17 @@
 """
-report_formatter.py
-
 Professional ABG Report Formatter
 """
 
 
 class ReportFormatter:
 
-
     @staticmethod
     def format(report):
 
         formatted = []
 
-
-        formatted.append(
-            "ABG INTERPRETATION REPORT"
-        )
-
-        formatted.append(
-            "────────────────────────"
-        )
-
+        formatted.append("ABG INTERPRETATION REPORT")
+        formatted.append("=" * 40)
 
         skip_lines = [
             "=" * 40,
@@ -29,84 +19,38 @@ class ReportFormatter:
             "ABG INTERPRETATION REPORT",
         ]
 
-
         section_titles = [
-            "Compensation",
+            "COMPENSATION",
+            "ANION GAP",
             "ANION GAP ANALYSIS",
-            "Delta Ratio",
+            "DELTA RATIO",
             "CLINICAL IMPRESSION",
+            "CLINICAL INTERPRETATION",
+            "CLINICAL RECOMMENDATIONS",
             "RECOMMENDATIONS",
+            "SEVERITY",
+            "CLINICAL ALERTS",
             "LACTATE",
+            "TRIPLE DISORDER",
             "TRIPLE DISORDER ANALYSIS",
         ]
 
-
         for line in report:
 
-
             if line in skip_lines:
-
                 continue
-
-
 
             if line.strip() == "":
-
                 formatted.append("")
-
                 continue
 
-
-
-            if line in section_titles:
-
+            if line.upper() in section_titles:
 
                 formatted.append("")
-
-                formatted.append(
-                    line.upper()
-                )
-
-                formatted.append(
-                    "────────────────────────"
-                )
-
+                formatted.append(line.upper())
+                formatted.append("-" * 40)
                 continue
 
-
-
-            if line.startswith("Expected PaCO₂"):
-
-                line = line.replace(
-                    "Expected PaCO₂",
-                    "Expected PaCO₂"
-                )
-
-
-
-            if line.startswith("Anion Gap :"):
-
-                line = line.replace(
-                    "Anion Gap :",
-                    "Anion Gap:"
-                )
-
-
-
-            if (
-                line.startswith("Check ")
-                or line.startswith("Review ")
-                or line.startswith("Correlate ")
-                or line.startswith("Repeat ")
-            ):
-
-                line = "• " + line
-
-
-
-            formatted.append(
-                line
-            )
-
+            formatted.append(line)
 
         return "\n".join(formatted)
