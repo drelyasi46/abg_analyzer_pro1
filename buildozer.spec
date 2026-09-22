@@ -10,7 +10,7 @@ source.dir = .
 source.include_exts = py,kv,png,jpg,jpeg,ttf,json
 source.exclude_dirs = .git,.github,.buildozer,bin,venv,.venv,buildenv,__pycache__
 
-version = 1.0
+version = 1.3.0
 
 requirements = python3==3.11.5,kivy==2.2.1,kivymd==1.2.0
 p4a.branch = v2024.01.21
