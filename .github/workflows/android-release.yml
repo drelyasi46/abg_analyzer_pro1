@@ -2,6 +2,9 @@ name: Build Android APK
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - android-auto-test
 
 jobs:
   build:
@@ -20,11 +23,20 @@ jobs:
           sudo apt-get install -y openjdk-17-jdk zip unzip
           pip install buildozer==1.6.0 cython==0.29.37
 
-      - name: Build APK
-        run: buildozer android release
+      - name: Prepare CI build configuration
+        run: |
+          sed -i '/^p4a\.source_dir[[:space:]]*=/d' buildozer.spec
+          sed -i '/^android\.sdk_path[[:space:]]*=/d' buildozer.spec
+          sed -i '/^android\.ndk_path[[:space:]]*=/d' buildozer.spec
+          sed -i '/^android\.release_artifact[[:space:]]*=/d' buildozer.spec
+          sed -i '/^android\.release_keystore[[:space:]]*=/d' buildozer.spec
+          sed -i '/^android\.release_keyalias[[:space:]]*=/d' buildozer.spec
+
+      - name: Build Android APK
+        run: buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: ABG-Analyzer-Pro
+          name: ABG-Analyzer-Pro-debug
           path: bin/*.apk
