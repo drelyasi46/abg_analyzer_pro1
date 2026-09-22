@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - android-auto-test
+      - main
 
 jobs:
   build:
@@ -33,7 +33,11 @@ jobs:
           sed -i '/^android\.release_keyalias[[:space:]]*=/d' buildozer.spec
 
       - name: Build Android APK
-        run: buildozer android debug
+        run: |
+          export JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
+          export PATH=$JAVA_HOME/bin:$PATH
+          java -version
+          buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
