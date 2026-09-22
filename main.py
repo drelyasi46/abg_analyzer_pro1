@@ -84,6 +84,77 @@ class ABGApp(MDApp):
         layout.add_widget(self.input_card)
         layout.add_widget(self.result_card)
 
+        sources_card = MDCard(
+            orientation="vertical",
+            padding=["16dp", "12dp", "16dp", "12dp"],
+            spacing="6dp",
+            size_hint_y=None,
+            height="170dp",
+            radius=[16, 16, 16, 16],
+            elevation=0,
+        )
+
+        sources_card.add_widget(
+            MDLabel(
+                text="منابع علمی",
+                halign="right",
+                size_hint_y=None,
+                height="30dp",
+            )
+        )
+
+        sources_card.add_widget(
+            MDLabel(
+                text=(
+                    "1. UpToDate — Arterial Blood Gas and Acid–Base Disorders\\n"
+                    "2. Adrogué HJ, Madias NE. Acid–Base Disorders. "
+                    "New England Journal of Medicine."
+                ),
+                halign="left",
+                size_hint_y=None,
+                height="110dp",
+            )
+        )
+
+        layout.add_widget(sources_card)
+        privacy_card = MDCard(
+            orientation="vertical",
+            padding=["16dp", "12dp", "16dp", "12dp"],
+            spacing="6dp",
+            size_hint_y=None,
+            height="190dp",
+            radius=[16, 16, 16, 16],
+            elevation=0,
+        )
+
+        privacy_card.add_widget(
+            MDLabel(
+                text="حریم خصوصی",
+                halign="right",
+                size_hint_y=None,
+                height="30dp",
+            )
+        )
+
+        privacy_card.add_widget(
+            MDLabel(
+                text=(
+                    "اطلاعات واردشده در ABG Analyzer Pro صرفاً برای انجام "
+                    "محاسبات و نمایش نتایج تحلیل گاز خون شریانی و اختلالات "
+                    "اسید–باز استفاده می‌شود.\n"
+                    "این برنامه برای دریافت نام، شماره تلفن، ایمیل یا سایر "
+                    "اطلاعات هویتی کاربر طراحی نشده است.\n"
+                    "اطلاعات واردشده در برنامه در فضای ابری یا سرور خارجی "
+                    "ارسال یا ذخیره نمی‌شود."
+                ),
+                halign="left",
+                size_hint_y=None,
+                height="130dp",
+            )
+        )
+
+        layout.add_widget(privacy_card)
+
         scroll.add_widget(layout)
         screen.add_widget(scroll)
 
