@@ -17,16 +17,10 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Setup Java 17
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
-
-      - name: Verify Java
-        run: |
-          java -version
-          echo "JAVA_HOME=$JAVA_HOME"
 
       - name: Install dependencies
         run: |
@@ -36,17 +30,22 @@ jobs:
 
       - name: Prepare CI build configuration
         run: |
+          git clone --depth 1 --branch v2024.01.21 https://github.com/kivy/python-for-android.git p4a-ci
+          sed -i 's#https://pypi.python.org/packages/source/s/setuptools/#https://files.pythonhosted.org/packages/source/s/setuptools/#' p4a-ci/pythonforandroid/recipes/setuptools/__init__.py
           sed -i '/^p4a\.source_dir[[:space:]]*=/d' buildozer.spec
           sed -i '/^android\.sdk_path[[:space:]]*=/d' buildozer.spec
           sed -i '/^android\.ndk_path[[:space:]]*=/d' buildozer.spec
           sed -i '/^android\.release_artifact[[:space:]]*=/d' buildozer.spec
           sed -i '/^android\.release_keystore[[:space:]]*=/d' buildozer.spec
           sed -i '/^android\.release_keyalias[[:space:]]*=/d' buildozer.spec
+          printf '\np4a.source_dir = ./p4a-ci\n' >> buildozer.spec
+          echo "JAVA_HOME=$JAVA_HOME"
+          java -version
+          grep -n 'p4a.source_dir' buildozer.spec
+          grep -n 'url =' p4a-ci/pythonforandroid/recipes/setuptools/__init__.py
 
       - name: Build Android APK
-        run: |
-          java -version
-          buildozer android debug
+        run: buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
