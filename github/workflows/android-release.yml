@@ -11,49 +11,107 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - uses: actions/setup-java@v4
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
+          cache: gradle
 
-      - name: Install dependencies
+      - name: Force Java 17
+        shell: bash
+        run: |
+          JAVA17="/usr/lib/jvm/temurin-17-jdk-amd64"
+
+          if [ ! -d "$JAVA17" ]; then
+            JAVA17="$(dirname "$(dirname "$(readlink -f "$(which java)")")")"
+          fi
+
+          echo "JAVA_HOME=$JAVA17" >> "$GITHUB_ENV"
+          echo "$JAVA17/bin" >> "$GITHUB_PATH"
+
+          export JAVA_HOME="$JAVA17"
+          export PATH="$JAVA_HOME/bin:$PATH"
+
+          echo "JAVA_HOME=$JAVA_HOME"
+          which java
+          java -version
+
+      - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y zip unzip
+          sudo apt-get install -y zip unzip git
+
+      - name: Install Buildozer
+        run: |
+          python -m pip install --upgrade pip
           pip install buildozer==1.6.0 cython==0.29.37
 
-      - name: Prepare CI build configuration
+      - name: Prepare python-for-android
+        shell: bash
         run: |
-          git clone --depth 1 --branch v2024.01.21 https://github.com/kivy/python-for-android.git p4a-ci
-          sed -i 's#https://pypi.python.org/packages/source/s/setuptools/#https://files.pythonhosted.org/packages/source/s/setuptools/#' p4a-ci/pythonforandroid/recipes/setuptools/__init__.py
+          rm -rf p4a-ci
+
+          git clone \
+            --depth 1 \
+            --branch v2024.01.21 \
+            https://github.com/kivy/python-for-android.git \
+            p4a-ci
+
+          sed -i \
+            's#https://pypi.python.org/packages/source/s/setuptools/#https://files.pythonhosted.org/packages/source/s/setuptools/#' \
+            p4a-ci/pythonforandroid/recipes/setuptools/__init__.py
+
           sed -i '/^p4a\.source_dir[[:space:]]*=/d' buildozer.spec
           sed -i '/^android\.sdk_path[[:space:]]*=/d' buildozer.spec
           sed -i '/^android\.ndk_path[[:space:]]*=/d' buildozer.spec
           sed -i '/^android\.release_artifact[[:space:]]*=/d' buildozer.spec
           sed -i '/^android\.release_keystore[[:space:]]*=/d' buildozer.spec
           sed -i '/^android\.release_keyalias[[:space:]]*=/d' buildozer.spec
+
           printf '\np4a.source_dir = ./p4a-ci\n' >> buildozer.spec
+
+          echo "===== JAVA ====="
           echo "JAVA_HOME=$JAVA_HOME"
+          which java
           java -version
+
+          echo "===== P4A ====="
           grep -n 'p4a.source_dir' buildozer.spec
           grep -n 'url =' p4a-ci/pythonforandroid/recipes/setuptools/__init__.py
 
       - name: Build Android APK
-        env:
-          JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
+        shell: bash
         run: |
+          export JAVA_HOME="/usr/lib/jvm/temurin-17-jdk-amd64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+
+          echo "===== BUILD JAVA ====="
           echo "JAVA_HOME=$JAVA_HOME"
+          which java
           java -version
+
+          echo "===== BUILD ====="
           buildozer android debug
 
+      - name: List APK
+        if: success()
+        run: |
+          echo "===== APK FILES ====="
+          find bin -maxdepth 1 -type f -name "*.apk" -print
+
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: ABG-Analyzer-Pro-debug
           path: bin/*.apk
+          if-no-files-found: error
