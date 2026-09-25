@@ -10,76 +10,41 @@ package.name = abganalyzer
 package.domain = drelyasibabak.ir
 
 # (str) Application version
-version = 1.2.0
-
+version = 1.3.0
 
 # (str) Source code directory
 source.dir = .
 
 # (str) Source file extensions
-source.include_exts = py,png,jpg,jpeg,kv,json,atlas,txt
+source.include_exts = py,kv,png,jpg,jpeg,ttf,json,atlas,txt
 
+# (str) Exclude directories
+source.exclude_dirs = .git,.github,.buildozer,bin,venv,.venv,buildenv,__pycache__
 
 # (list) Requirements
-requirements = python3,kivy==2.2.1,pyjnius
+requirements = python3==3.11.5,kivy==2.2.1,kivymd==1.2.0,pyjnius
 
+# Python-for-Android version pin
+p4a.branch = v2024.01.21
+p4a.commit = v2024.01.21
 
 # (str) Orientation
 orientation = portrait
 
-
 # (bool) Enable fullscreen
 fullscreen = 0
 
-
-# (str) Android API
+# Android API
 android.api = 34
 
-# (str) Minimum Android API
+# Minimum Android API
 android.minapi = 24
 
-# (str) NDK version
-android.ndk = 25.2.9519653
-
-
-# (list) Architectures
+# Android architecture
 android.archs = arm64-v8a
 
+# Permissions
+android.permissions = INTERNET
 
-# (bool) AndroidX
-android.enable_androidx = True
-
-
-# (str) Entry point
-android.entrypoint = org.kivy.android.PythonActivity
-
-
-# (str) Presplash
-# presplash.filename = %(source.dir)s/data/presplash.png
-
-
-# (str) Icon
-# icon.filename = %(source.dir)s/data/icon.png
-
-
-# (bool) Copy libraries
-android.copy_libs = 1
-
-
-# (str) Release artifact
-android.release_artifact = aab
-
-
-# (bool) Accept SDK licenses
-android.accept_sdk_license = True
-
-
-
-[buildozer]
-
-# Log level
-log_level = 2
-
-
-# Warn about deprecated options
-warn_on_root = 1
+# Android package metadata
+android.release_artifact = apk
