@@ -49,10 +49,14 @@ jobs:
           "platforms;android-34" \
           "build-tools;34.0.0"
 
+    - name: Prepare Buildozer SDK
+      run: |
+        mkdir -p ~/.buildozer/android/platform
+        rm -rf ~/.buildozer/android/platform/android-sdk
+        ln -s $ANDROID_HOME ~/.buildozer/android/platform/android-sdk
+
     - name: Build APK
       run: |
-        export ANDROIDSDK=$ANDROID_HOME
-        export ANDROID_HOME=$ANDROID_HOME
         buildozer -v android debug
 
     - name: Upload APK
